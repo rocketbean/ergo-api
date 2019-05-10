@@ -33,10 +33,18 @@ class Property extends Model
     }
     
     /**
-     * Get all of the photos for the jobrequest.
+     * Get all of the [photos] for the [property].
      */
     public function photos()
     {
         return $this->morphToMany(Photo::class, 'photoable');
+    }
+
+    /**
+     * Get all of the [videos] for the [property].
+     */
+    public function videos()
+    {
+        return $this->morphToMany(Video::class, 'videoable');
     }
 }

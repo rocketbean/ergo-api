@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePhotosTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,21 @@ class CreatePhotosTable extends Migration
      */
     public function up()
     {
-        Schema::create('photos', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id')->index();
+            $table->bigInteger('user_id');
             $table->string('filename');
             $table->string('ext');
-            $table->string('thumb');
             $table->text('path');
             $table->timestamps();
         });
 
-        Schema::create('photoables', function (Blueprint $table) {
-            $table->bigInteger('photo_id')->index();
-            $table->bigInteger('photoable_id')->index();
-            $table->string('photoable_type');
+        Schema::create('fileables', function (Blueprint $table) {
+            $table->bigInteger('file_id')->index();
+            $table->bigInteger('fileable_id')->index();
+            $table->string('fileable_type');
             $table->timestamps();
-            $table->unique(['photo_id', 'photoable_id', 'photoable_type']);
+            $table->unique(['file_id', 'fileable_id', 'fileable_type']);
         });
     }
 
@@ -39,7 +38,8 @@ class CreatePhotosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('photos');
-        Schema::dropIfExists('photoables');
+        Schema::dropIfExists('files');
+        Schema::dropIfExists('fileables');
+
     }
 }

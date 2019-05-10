@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -38,6 +39,16 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    public static function validate(Request $request)
+    {
+        return $request->validate([
+            'email'                 => 'required|string|email|max:255|unique:users',
+            'name'                  => 'required',
+            'password'              => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6'
+        ]);
+    }
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -54,10 +65,18 @@ class User extends Authenticatable implements JWTSubject
     }
     
     /**
-     * Get all of the photos for the jobrequest.
+     * Get all of the [photos] for the [user].
      */
     public function photos()
     {
         return $this->morphToMany(Photo::class, 'photoable');
+    }
+
+    /**
+     * Get all of the [videos] for the [user].
+     */
+    public function videos()
+    {
+        return $this->morphToMany(Video::class, 'videoable');
     }
 }

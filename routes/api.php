@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::post('attempt','AuthController@login');
+Route::post('register','RegistrationController@register');
 Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.configure');
 
 Route::group(['middleware' => 'jwt.auth'], function () {

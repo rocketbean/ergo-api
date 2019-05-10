@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\JobRequestItem;
 use App\Models\Tag;
 use App\Models\Photo;
+use App\Models\Video;
 
 class JobRequest extends Model
 {
@@ -43,6 +44,14 @@ class JobRequest extends Model
     public function photos()
     {
         return $this->morphToMany(Photo::class, 'photoable');
+    }
+
+    /**
+     * Get all of the videos for the jobrequest.
+     */
+    public function videos()
+    {
+        return $this->morphToMany(Video::class, 'photoable');
     }
 
     /**

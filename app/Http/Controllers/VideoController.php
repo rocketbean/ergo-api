@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Auth;
-use App\Models\File;
-use App\Services\FileService;
-use Illuminate\Http\Request;
 
-class FileController extends Controller
+use App\Models\Video;
+use Illuminate\Http\Request;
+use App\Services\VideoService;
+use Auth;
+class VideoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,41 +36,36 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        if(preg_match("/image/i", $request->file->getMimeType())) {
-            return (new PhotoController)->store($request);
-        } else if (preg_match("/video/i", $request->file->getMimeType())) {
-            return (new VideoController)->store($request);
-        } else {
-            $fp = (new FileService)->process($request);
-            $file = File::create([
-              'user_id'  => Auth::user()->id,
-              'filename' => $fp['filename'],
-              'ext'      => $fp['ext'],
-              'path'     => $fp['path'],
-            ]);
-            $file->users()->attach(Auth::user()->id);
-            return $file;
-        }
+        $vid = (new VideoService)->process($request);
+        $video = Video::create([
+          'user_id'  => Auth::user()->id,
+          'filename' => $vid['filename'],
+          'ext'      => $vid['ext'],
+          'thumb'    => $vid['thumb'],
+          'path'     => $vid['path'],
+        ]);
+        $video->users()->attach(Auth::user()->id);
+        return $video;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\File  $file
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function show(File $file)
+    public function show(Video $video)
     {
-        //
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\File  $file
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function edit(File $file)
+    public function edit(Video $video)
     {
         //
     }
@@ -79,10 +74,10 @@ class FileController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\File  $file
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, File $file)
+    public function update(Request $request, Video $video)
     {
         //
     }
@@ -90,10 +85,10 @@ class FileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\File  $file
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
-    public function destroy(File $file)
+    public function destroy(Video $video)
     {
         //
     }

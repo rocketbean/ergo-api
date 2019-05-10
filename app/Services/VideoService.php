@@ -1,15 +1,14 @@
 <?php
 namespace App\Services;
-
 use Storage;
 use Image;
-use File;
+use FFMpeg;
 
-class FileService {
+class VideoService {
   public function process ($request) {
     $file      = $request->file('file');
     $fileName   = time() . '.' . $file->getClientOriginalExtension();
-    $filepath   = 'files/'  ;
+    $filepath   = 'videos/'  ;
     Storage::disk('local')->putFileAs($filepath, $file, $fileName);
     return $this->returnObj($filepath, $file->getClientOriginalExtension(),$fileName);
   }
@@ -18,6 +17,7 @@ class FileService {
     return [
       'filename' => $fileName,
       'ext' => $ext,
+      'thumb' => 'thumb',
       'path' => $file,
     ];
   }

@@ -29,4 +29,26 @@ class UserTest extends TestCase
         ]);
         $response->assertStatus(200);
     }
+
+    /**
+     * [user] Registration test
+     * "./vendor/bin/phpunit" C:/Users/buzzo/OneDrive/Desktop/web/ergo-api/tests/Feature/Http/UserTest
+     * @test
+     */
+    public function can_register()
+    {
+        $this->withoutExceptionHandling();
+        $user = factory(User::class)->make();
+        $response = $this->post('/api/register', [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => 'password',
+            'password_confirmation' => 'password'
+        ]);
+        $response->assertSuccessful();
+        $this->assertDatabaseHas('users', [
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
+    }
 }

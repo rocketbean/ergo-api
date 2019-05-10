@@ -182,6 +182,24 @@ trait TestHelper
         ]);
     }
 
+    public function uploadFile($file) {
+        $user  = factory(User::class)->create();
+        return $this->post('/api/uploads/files/store', [
+            'file' => $file,
+        ],[
+            'Authorization' => 'Bearer '.\JWTAuth::fromUser($user),
+        ]);
+    }
+
+    public function uploadVideo($file) {
+        $user  = factory(User::class)->create();
+        return $this->post('/api/uploads/files/store', [
+            'file' => $file,
+        ],[
+            'Authorization' => 'Bearer '.\JWTAuth::fromUser($user),
+        ]);
+    }
+
     public function JobRequestItemAttachPhoto($jr, $item, $photo) {
         $user  = factory(User::class)->create();
         return $this->post('/api/jobrequests/' . $jr['id'] . '/items/' . $item['id'] . '/photos/' . $photo['id'] . '/attach', [
