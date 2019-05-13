@@ -15,8 +15,12 @@ use Illuminate\Http\Request;
 Route::post('attempt','AuthController@login');
 Route::post('register','RegistrationController@register');
 Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.configure');
+Route::post('photological', 'CoreController@assignPhotos')->middleware('core.configure');
 
 Route::group(['middleware' => 'jwt.auth'], function () {
+  Route::group(['prefix' => 'ergo'], function () {
+    Route::get('countries', 'CoreController@countries');
+  });
   /*
     Photos
   */
@@ -47,8 +51,10 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     properties
   */
   Route::group(['prefix' => 'properties'], function () {
+    Route::post('', 'PropertyController@index');
     Route::post('store', 'PropertyController@store');
     Route::group(['prefix' => '{property}'], function () {
+      Route::post('show', 'PropertyController@show');
       Route::group(['prefix' => 'tag'], function () {
         Route::post('{tag}/attach', 'PropertyController@attach');
       });

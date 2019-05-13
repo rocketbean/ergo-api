@@ -15,7 +15,8 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        return $user->properties;
     }
 
     /**
@@ -39,7 +40,8 @@ class PropertyController extends Controller
         return Property::create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'primary'     => 1
         ]);
     }
 
@@ -51,7 +53,7 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        //
+        return $property->load(['jobrequests', 'photos', 'location', 'videos']);
     }
 
     /**

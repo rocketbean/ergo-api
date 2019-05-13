@@ -11,6 +11,7 @@ use App\Models\Photo;
 class Property extends Model
 {
     protected $guarded = [];
+    protected $with = ['primary'];
 
      public function user () {
       return $this->belongsTo(User::class);
@@ -38,6 +39,14 @@ class Property extends Model
     public function photos()
     {
         return $this->morphToMany(Photo::class, 'photoable');
+    }
+
+    /**
+     * Get all of the [photos] for the [property].
+     */
+    public function primary()
+    {
+        return $this->belongsTo(Photo::class, 'primary');
     }
 
     /**

@@ -4,6 +4,10 @@ use Storage;
 use Image;
 
 class ImageService {
+  public function setDefaultPropertyPrimary () {
+    // $file = Storage::disk('local')->get('images/house.jpg');
+  }
+
   public function process ($request) {
     $image      = $request->file('file');
     $timenow    = time();
