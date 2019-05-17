@@ -36,16 +36,20 @@ class LocationController extends Controller
      */
     public function store(Property $property, Request $request)
     {
-        return $property->location()->create([
-            'user_id'   => Auth::user()->id,
-            'address1'  => $request->address1,
-            'address2'  => $request->address2,
-            'city'      => $request->city,
-            'state'     => $request->state,
-            'country'   => $request->country,
-            'lat'       => $request->lat,
-            'lng'       => $request->lng,
+        $location = Location::create([
+            'locationable_id'    => $property->id,
+            'locationable_type' => Property::class,
+            'user_id'            => Auth::user()->id,
+            'address1'           => $request->address1,
+            'address2'           => $request->address2,
+            'city'               => $request->city,
+            'state'              => $request->state,
+            'country'            => $request->country,
+            'lat'                => $request->lat,
+            'lng'                => $request->lng,
         ]);
+        $property->update(['location_id' => $location->id]);
+        return $property->load(['jobrequests', 'photos', 'location', 'videos']);
     }
 
     /**

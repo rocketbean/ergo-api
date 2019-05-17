@@ -18,11 +18,18 @@ class Property extends Model
      }
 
      public function location () {
-      return $this->morphMany(Location::class, 'locationable');
+      return $this->belongsTo(Location::class);
      }
 
      public function Jobrequests () {
       return $this->hasMany(JobRequest::class);
+     }
+
+    /**
+     * Get all of the tags for the post.
+     */
+     public function locations () {
+      return $this->morphToMany(Location::class, 'locationable');
      }
 
     /**

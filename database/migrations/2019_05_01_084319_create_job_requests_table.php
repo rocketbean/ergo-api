@@ -17,7 +17,7 @@ class CreateJobRequestsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
             $table->bigInteger('property_id')->index();
-            $table->integer('status_id')->index();
+            $table->integer('status_id')->default(2)->index();
             $table->bigInteger('job_order_id')->index()->nullable();
             $table->string('name');
             $table->string('description')->nullable();

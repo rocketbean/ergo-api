@@ -39,7 +39,6 @@ class JobRequestController extends Controller
         return $property->jobrequests()->create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
-            'status_id'   => $request->status_id,
             'description' => $request->description,
         ]);
     }
