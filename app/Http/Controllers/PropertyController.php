@@ -16,7 +16,7 @@ class PropertyController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return $user->properties;
+        return $user->properties->load(['users']);
     }
 
     /**
@@ -37,12 +37,14 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
-        return Property::create([
+        $property = Property::create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
             'description' => $request->description,
             'primary'     => 1
         ]);
+        $property->users()->attach(Auth::user()->id, ['role_id' => 1]);
+        return $property;
     }
 
     /**
@@ -53,7 +55,7 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
-        return $property->load(['jobrequests', 'photos', 'location', 'videos']);
+        return $property->load(['jobrequests', 'photos', 'location', 'videos','users']);
     }
 
     /**

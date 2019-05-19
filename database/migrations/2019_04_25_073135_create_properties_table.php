@@ -19,7 +19,15 @@ class CreatePropertiesTable extends Migration
             $table->bigInteger('primary')->index();
             $table->bigInteger('user_id')->index();
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('property_user', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->index();
+            $table->bigInteger('property_id')->index();
+            $table->bigInteger('role_id')->default(2)->index();
             $table->timestamps();
         });
     }
@@ -32,5 +40,6 @@ class CreatePropertiesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('properties');
+        Schema::dropIfExists('property_user');
     }
 }

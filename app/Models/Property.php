@@ -63,4 +63,13 @@ class Property extends Model
     {
         return $this->morphToMany(Video::class, 'videoable');
     }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }
