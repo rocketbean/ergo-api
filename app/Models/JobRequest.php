@@ -14,6 +14,8 @@ class JobRequest extends Model
 {
     protected $guarded = [];
 
+    protected $with = ['items'];
+
     public function property () {
       return $this->belongsTo(Property::class);
     }

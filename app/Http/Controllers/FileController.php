@@ -36,10 +36,10 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        if(preg_match("/image/i", $request->file->getMimeType())) {
-            return (new PhotoController)->store($request);
+        if(preg_match("/image/i", ($request->file->getMimeType()))) {
+            $photo = (new PhotoController)->store($request);
         } else if (preg_match("/video/i", $request->file->getMimeType())) {
-            return (new VideoController)->store($request);
+            $video = (new VideoController)->store($request);
         } else {
             $fp = (new FileService)->process($request);
             $file = File::create([
@@ -49,8 +49,13 @@ class FileController extends Controller
               'path'     => $fp['path'],
             ]);
             $file->users()->attach(Auth::user()->id);
-            return $file;
         }
+
+        return [
+            'video' => isset($video) ?  $video : null,
+            'photo' => isset($photo) ? $photo : null,
+            'file' => isset($file) ? $file : null,
+        ];
     }
 
     /**

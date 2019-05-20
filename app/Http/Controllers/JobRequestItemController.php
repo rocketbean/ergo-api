@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\JobRequestItem;
 use App\Models\User;
-use App\Models\Photo;
 use App\Models\JobRequest;
 use App\Models\Property;
+use App\Models\Photo;
+use App\Models\Video;
+use App\Models\File;
 use Illuminate\Http\Request;
 
 class JobRequestItemController extends Controller
@@ -39,12 +41,32 @@ class JobRequestItemController extends Controller
      */
     public function store(Property $property, JobRequest $jr, Request $request)
     {
-        $jr->items()->create([
-            'property_id' => $property->id,
-            'user_id' => Auth::user()->id,
-            'name' => $request->name,
-            'description' => $request->description
+        $jri = JobRequestItem::create([
+            'property_id'       => $property->id,
+            'user_id'           => Auth::user()->id,
+            'name'              => $request->name,
+            'job_request_id'    => $jr->id,
+            'description'       => $request->description
         ]);
+        
+        if(!empty($request->photos)) {
+            foreach ($request->photos as $photo) {
+                $jri->photos()->attach($photo['id']);
+            }
+        }
+
+        if(!empty($request->photos)) {
+            foreach ($request->photos as $photo) {
+                $jri->photos()->attach($photo['id']);
+            }
+        }
+
+        if(!empty($request->photos)) {
+            foreach ($request->photos as $photo) {
+                $jri->photos()->attach($photo['id']);
+            }
+        }
+
         return $jr->load('items');
     }
 
