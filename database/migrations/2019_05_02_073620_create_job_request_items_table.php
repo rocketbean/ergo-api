@@ -19,7 +19,7 @@ class CreateJobRequestItemsTable extends Migration
             $table->bigInteger('property_id')->index();
             $table->bigInteger('job_request_id')->index();
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->timestamps();
         });
     }

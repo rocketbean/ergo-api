@@ -16,10 +16,12 @@ Route::post('attempt','AuthController@login');
 Route::post('register','RegistrationController@register');
 Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.configure');
 Route::post('photological', 'CoreController@assignPhotos')->middleware('core.configure');
+Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
 
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::group(['prefix' => 'ergo'], function () {
     Route::get('countries', 'CoreController@countries');
+    Route::get('tags', 'CoreController@tags');
   });
   /*
     Photos

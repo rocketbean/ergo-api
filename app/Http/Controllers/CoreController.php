@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Photo;
+use App\Models\Tag;
 use App\Services\ErgoService;
 use App\Models\Country;
 use App\Http\Resources\Country as CountryResource;
@@ -34,7 +35,7 @@ class CoreController extends Controller
           'filename' => 'default',
           'ext'      => 'jpg',
           'thumb'    => '_',
-          'path'     => 'storage/house.jpg',
+          'path'     => 'images/house.jpg',
         ]);
     }
 
@@ -47,5 +48,33 @@ class CoreController extends Controller
     public function countries() {
         return Country::all();
         // return new CountryResource($country);
+    }
+
+    /**
+     * Creates The general services tags [options]
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function assignTags() {
+        $tags = (new Tag)->general_services();
+        foreach ($tags as $tag) {
+            Tag::create([
+                'name'          => $tag['name'],
+                'icon'          => $tag['icon'],
+                'description'   => $tag['description']
+            ]);
+        }
+        return Tag::all();
+    }
+
+    /**
+     * returns Tag list
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function tags() {
+        return Tag::all();
     }
 }

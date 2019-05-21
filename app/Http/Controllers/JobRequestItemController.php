@@ -55,15 +55,15 @@ class JobRequestItemController extends Controller
             }
         }
 
-        if(!empty($request->photos)) {
-            foreach ($request->photos as $photo) {
-                $jri->photos()->attach($photo['id']);
+        if(!empty($request->files)) {
+            foreach ($request->files as $file) {
+                $jri->files()->attach($file['id']);
             }
         }
 
-        if(!empty($request->photos)) {
-            foreach ($request->photos as $photo) {
-                $jri->photos()->attach($photo['id']);
+        if(!empty($request->videos)) {
+            foreach ($request->videos as $video) {
+                $jri->videos()->attach($video['id']);
             }
         }
 

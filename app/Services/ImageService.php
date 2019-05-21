@@ -17,11 +17,11 @@ class ImageService {
     $thumbfilepath   = 'images/thumb' . $thumbfileName;
     $img = Image::make($image->getRealPath());
     $img->stream();
-    Storage::disk('local')->put($filepath, $img, 'public');
+    Storage::disk('local')->put('public/' . $filepath, $img, 'public');
     $thumb = $img->resize(65, 65, function ($constraint) {
         $constraint->aspectRatio();                 
     });
-    Storage::disk('local')->put($thumbfilepath, $img, 'public');
+    Storage::disk('local')->put('public/' . $thumbfilepath, $img, 'public');
     return $this->returnObj($filepath, $thumbfilepath, $image->getClientOriginalExtension(),$fileName);
   }
 
