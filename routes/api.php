@@ -42,6 +42,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   Route::group(['prefix' => 'jobrequests'], function () {
     Route::group(['prefix' => '{jr}'], function () {
       Route::group(['prefix' => 'items/{item}'], function () {
+        Route::post('destroy', 'JobRequestItemController@destroy');
         Route::group(['prefix' => 'photos/{photo}'], function () {
           Route::post('attach', 'JobRequestItemController@attachPhoto');
         });
@@ -57,6 +58,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('store', 'PropertyController@store');
     Route::group(['prefix' => '{property}'], function () {
       Route::post('show', 'PropertyController@show');
+      Route::post('update/primary/{photo}', 'PropertyController@primary');
       Route::group(['prefix' => 'tag'], function () {
         Route::post('{tag}/attach', 'PropertyController@attach');
       });
@@ -64,6 +66,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
         Route::post('store', 'JobRequestController@store');
         Route::group(['prefix' => '{jr}'], function () {
           Route::post('/', 'JobRequestController@index');
+          Route::post('/destroy', 'JobRequestController@destroy');
           Route::post('publish', 'JobRequestController@publish');
           Route::post('items/store', 'JobRequestItemController@store');
         });

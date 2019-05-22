@@ -2,7 +2,7 @@
 namespace App\Services;
 use Storage;
 use Image;
-
+use Illuminate\Support\Str;
 class ImageService {
   public function setDefaultPropertyPrimary () {
     // $file = Storage::disk('local')->get('images/house.jpg');
@@ -11,10 +11,10 @@ class ImageService {
   public function process ($request) {
     $image      = $request->file('file');
     $timenow    = time();
-    $fileName   = $timenow . '.' . $image->getClientOriginalExtension();
+    $fileName   = Str::random(8). '_' . $timenow . '.' . $image->getClientOriginalExtension();
     $filepath   = 'images/' . $fileName;
-    $thumbfileName   = $timenow . '_thumb.' . $image->getClientOriginalExtension();
-    $thumbfilepath   = 'images/thumb' . $thumbfileName;
+    $thumbfileName   = 'thumb_' . $fileName;
+    $thumbfilepath   = 'images/thumb/' . $thumbfileName;
     $img = Image::make($image->getRealPath());
     $img->stream();
     Storage::disk('local')->put('public/' . $filepath, $img, 'public');

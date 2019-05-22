@@ -67,6 +67,12 @@ class JobRequestItemController extends Controller
             }
         }
 
+        if(!empty($request->tags)) {
+            foreach ($request->tags as $tag) {
+                $jri->tags()->attach($tag['value']);
+            }
+        }
+
         return $jr->load('items');
     }
 
@@ -110,9 +116,13 @@ class JobRequestItemController extends Controller
      * @param  \App\Models\JobRequestItem  $jobRequestItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(JobRequestItem $jobRequestItem)
+    public function destroy(JobRequest $jr, JobRequestItem $item)
     {
-        //
+        $item->photos()->detach($item->id);
+        $item->files()->detach($item->id);
+        $item->videos()->detach($item->id);
+        $item->delete();
+        return $jr->load('items');
     }
 
     /**

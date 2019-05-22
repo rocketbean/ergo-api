@@ -21,6 +21,7 @@ class CreateJobRequestItemsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->timestamps();
+      
         });
     }
 
