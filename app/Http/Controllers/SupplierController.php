@@ -37,11 +37,13 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        return Supplier::create([
+        $supplier = Supplier::create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
             'description' => $request->description
         ]);
+        Auth::user()->services()->attach($supplier->id);
+        return $supplier;
     }
 
     /**

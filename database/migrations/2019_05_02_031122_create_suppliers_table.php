@@ -17,7 +17,16 @@ class CreateSuppliersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
             $table->string('name');
+            $table->string('status_id')->default(2)->index();
             $table->string('description')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('supplier_user', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->index();
+            $table->bigInteger('supplier_id')->index();
+            $table->bigInteger('role_id')->default(2)->index();
             $table->timestamps();
         });
     }
@@ -30,5 +39,6 @@ class CreateSuppliersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('suppliers');
+        Schema::dropIfExists('supplier_user');
     }
 }

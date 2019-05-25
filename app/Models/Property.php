@@ -13,7 +13,7 @@ class Property extends Model
     protected $guarded = [];
     protected $with = ['primary'];
 
-     public function user () {
+     public function owner () {
       return $this->belongsTo(User::class);
      }
 

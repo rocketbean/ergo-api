@@ -45,4 +45,12 @@ class Supplier extends Model
     {
         return $this->morphToMany(Photo::class, 'photoable');
     }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

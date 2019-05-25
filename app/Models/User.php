@@ -39,6 +39,10 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    protected $with = [
+        'services'
+    ];
+
     public static function validate(Request $request)
     {
         return $request->validate([
@@ -78,5 +82,13 @@ class User extends Authenticatable implements JWTSubject
     public function videos()
     {
         return $this->morphToMany(Video::class, 'videoable');
+    }
+
+    /**
+     * Get all of the [photos] for the [user].
+     */
+    public function services()
+    {
+        return $this->belongsToMany(Supplier::class);
     }
 }
