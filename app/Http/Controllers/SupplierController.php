@@ -16,7 +16,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        return $user->services->load(['users']);
     }
 
     /**
@@ -40,7 +41,8 @@ class SupplierController extends Controller
         $supplier = Supplier::create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'primary'     => 1
         ]);
         Auth::user()->services()->attach($supplier->id);
         return $supplier;

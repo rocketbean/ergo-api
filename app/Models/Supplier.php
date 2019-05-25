@@ -53,4 +53,11 @@ class Supplier extends Model
     {
         return $this->belongsToMany(User::class);
     }
+    /**
+     * Get [primary] for the [property].
+     */
+    public function primary()
+    {
+        return $this->belongsTo(Photo::class, 'primary');
+    }
 }
