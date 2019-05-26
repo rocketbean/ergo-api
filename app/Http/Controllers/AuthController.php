@@ -99,15 +99,15 @@ class AuthController extends Controller
      */ 
       public function grantToken()
       {
-        $guzzle = new Client([
-            'base_uri' => 'http://localhost/',
-            'headers'   => ['Accept' => 'application/json'],
-            'timeout'  => 10.0,
-            'defaults' => [
-                'exceptions' => false
-            ],
-        ]);
-        $response = $guzzle->request('POST','oauth/token');
+        $guzzle = new Client();
+        $response = $guzzle->post('http://localhost/oauth/token', [
+          'form_params' => [
+              'grant_type' => 'client_credentials',
+              'client_id' => '2',
+              'client_secret' => '3jusaFS94qp3x8rzgJCfzktvq94Es7wTdhlBz10y',
+              'scope' => '',
+          ],
+      ]);
         // return (string) var_dump($response->getBody());
         return json_decode((string) $response->getBody(), true);
       }
