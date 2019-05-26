@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use JWTAuth;
-
-use Illuminate\Http\Request;
 use App\Models\User;
+use Auth;
+use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use JWTAuth;
+use Tymon\JWTAuth\JWT;
 
 class AuthController extends Controller
 {
@@ -68,5 +69,47 @@ class AuthController extends Controller
     {
         return Auth::guard();
     }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+      public function getAuthenticatedUser(Request $request)
+      {
+        try {
+          if (! $user = JWTAuth::parseToken()->authenticate()) {
+                  return response()->json(['user_not_found'], 404);
+          }
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+          return response()->json(['token_expired'], $e->getStatusCode());
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+          return response()->json(['token_invalid'], $e->getStatusCode());
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+          return response()->json(['token_absent'], $e->getStatusCode());
+        }
+        // return $user;
+        return $this->grantToken($user, $request);
+      }
+
+    /**
+     * Get the guard to be used during authentication.
+     * User $user, Request $request
+     * @return \Illuminate\Contracts\Auth\Guard
+     */ 
+      public function grantToken()
+      {
+        $guzzle = new Client([
+            'base_uri' => 'http://localhost/',
+            'headers'   => ['Accept' => 'application/json'],
+            'timeout'  => 10.0,
+            'defaults' => [
+                'exceptions' => false
+            ],
+        ]);
+        $response = $guzzle->request('POST','oauth/token');
+        // return (string) var_dump($response->getBody());
+        return json_decode((string) $response->getBody(), true);
+      }
 }
 

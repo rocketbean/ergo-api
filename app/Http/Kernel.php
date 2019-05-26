@@ -42,6 +42,12 @@ class Kernel extends HttpKernel
             'bindings',
              \Barryvdh\Cors\HandleCors::class,
         ],
+
+        'service' => [
+            'throttle:60,1',
+            'bindings',
+             \Barryvdh\Cors\HandleCors::class,
+        ],
     ];
 
     /**
@@ -64,6 +70,7 @@ class Kernel extends HttpKernel
         'jwt.auth' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
         'jwt.refresh' => \Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
         'core.configure' => \App\Http\Middleware\core\configurable::class,
+        'service' => \App\Http\Middleware\service::class,
     ];
 
     /**

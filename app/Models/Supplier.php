@@ -13,7 +13,9 @@ use App\Models\Photo;
 class Supplier extends Model
 {
     protected $guarded = [];
-
+    protected $with = [
+        'primary'
+    ];
     public function user () {
       return $this->belongsTo(User::class);
     }
