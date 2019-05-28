@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\AuthDriverService;
 use Auth;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -79,6 +80,7 @@ class AuthController extends Controller
       {
         try {
           if (! $user = JWTAuth::parseToken()->authenticate()) {
+
                   return response()->json(['user_not_found'], 404);
           }
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
@@ -88,7 +90,7 @@ class AuthController extends Controller
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
           return response()->json(['token_absent'], $e->getStatusCode());
         }
-        // return $user;
+        return $user;
         return $this->grantToken($user, $request);
       }
 
@@ -99,16 +101,16 @@ class AuthController extends Controller
      */ 
       public function grantToken()
       {
-        $guzzle = new Client();
-        $response = $guzzle->post('http://localhost/oauth/token', [
-          'form_params' => [
-              'grant_type' => 'client_credentials',
-              'client_id' => '2',
-              'client_secret' => '3jusaFS94qp3x8rzgJCfzktvq94Es7wTdhlBz10y',
-              'scope' => '',
-          ],
-      ]);
-        // return (string) var_dump($response->getBody());
+        return (new AuthDriverService)->grant();
+      //   $guzzle = new Client();
+      //   $response = $guzzle->post('http://localhost/oauth/token', [
+      //     'form_params' => [
+      //         'grant_type' => 'client_credentials',
+      //         'client_id' => '2',
+      //         'client_secret' => 'rx8RMVv3n6dna0rozZtf2wj1nGr6fTbe6US6dbjn',
+      //         'scope' => '',
+      //     ],
+      // ]);
         return json_decode((string) $response->getBody(), true);
       }
 }

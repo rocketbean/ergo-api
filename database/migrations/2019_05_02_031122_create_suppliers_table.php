@@ -19,7 +19,7 @@ class CreateSuppliersTable extends Migration
             $table->bigInteger('primary')->default(2)->index();
             $table->string('name');
             $table->string('status_id')->default(2)->index();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
 

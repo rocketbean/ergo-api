@@ -12,7 +12,28 @@ use App\Models\Photo;
 
 class Supplier extends Model
 {
+
+    /**
+     * this guarded attributes cannot be mass assigned.
+     *
+     * @var array
+     */
     protected $guarded = [];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * automatically load relations upon call
+     *
+     * @var array
+     */
     protected $with = [
         'primary'
     ];
