@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use Auth;
-use App\Models\Supplier;
 use App\Models\Property;
+use App\Models\Supplier;
 use App\Models\Tag;
+use App\Services\AuthDriverService;
+use Auth;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -38,14 +39,23 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
+        $supplier = Supplier::where('id',3)->with('users')->first();
+        foreach ($supplier->users as $user) {
+            return $user->pivot->client_id;
+            # code...
+        }
+
         $supplier = Supplier::create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
             'description' => $request->description,
             'primary'     => 1
         ]);
-        Auth::user()->services()->attach($supplier->id);
-        return $supplier;
+
+        $client = (new AuthDriverService)->grant($request);
+
+        return Auth::user()->services()->attach($supplier->id, ['client_id' => $client['id']]);
+        return $client;
     }
 
     /**

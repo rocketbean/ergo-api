@@ -9,6 +9,9 @@ use App\Models\Tag;
 use App\Models\Location;
 use App\Models\JobOrder;
 use App\Models\Photo;
+use Laravel\Passport\ClientRepository;
+use Laravel\Passport\Http\Rules\RedirectRule;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 class Supplier extends Model
 {
@@ -26,7 +29,7 @@ class Supplier extends Model
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        // 'client', 'remember_token',
     ];
 
     /**
@@ -70,14 +73,24 @@ class Supplier extends Model
     }
 
     /**
-     * Get all of the [users] for the [property].
+     * Get all of the [users] for the [supplier].
      */
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('client_id');
     }
+
+    public function newPivot(Model $parent, array $attributes, $table, $exists,  $using = null)
+    {
+        if ($parent instanceof User) {
+            return SupplierUserPivot::fromRawAttributes($parent, $attributes, $table, $exists, $using);
+        }
+
+        return parent::newPivot($parent, $attributes, $table, $exists, $using);
+    }
+
     /**
-     * Get [primary] for the [property].
+     * Get [primary] for the [supplier].
      */
     public function primary()
     {

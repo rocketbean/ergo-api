@@ -28,6 +28,7 @@ class CreateSuppliersTable extends Migration
             $table->bigInteger('user_id')->index();
             $table->bigInteger('supplier_id')->index();
             $table->bigInteger('role_id')->default(2)->index();
+            $table->bigInteger('client_id')->index();
             $table->timestamps();
         });
     }

@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Http\Request;
-use Laravel\Passport\HasApiTokens;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Photo;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, HasApiTokens;
@@ -41,7 +42,7 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $with = [
-        'services'
+        'suppliers'
     ];
 
     public static function validate(Request $request)
@@ -88,8 +89,19 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get all of the [photos] for the [user].
      */
-    public function services()
+    public function suppliers()
     {
         return $this->belongsToMany(Supplier::class);
     }
+
+
+    public function newPivot(Model $parent, array $attributes, $table, $exists,  $using = null)
+    {
+        if ($parent instanceof User) {
+            return SupplierUser::fromRawAttributes($parent, $attributes, $table, $exists, $using);
+        }
+
+        return parent::newPivot($parent, $attributes, $table, $exists, $using);
+    }
+
 }

@@ -101,7 +101,7 @@ class AuthController extends Controller
      */ 
       public function grantToken()
       {
-        return (new AuthDriverService)->grant();
+        return (new AuthDriverService)->token();
       //   $guzzle = new Client();
       //   $response = $guzzle->post('http://localhost/oauth/token', [
       //     'form_params' => [
@@ -113,5 +113,21 @@ class AuthController extends Controller
       // ]);
         return json_decode((string) $response->getBody(), true);
       }
+
+      public function register(Request $request)
+      {
+        return (new AuthDriverService)->grant($request);
+      //   $guzzle = new Client();
+      //   $response = $guzzle->post('http://localhost/oauth/token', [
+      //     'form_params' => [
+      //         'grant_type' => 'client_credentials',
+      //         'client_id' => '2',
+      //         'client_secret' => 'rx8RMVv3n6dna0rozZtf2wj1nGr6fTbe6US6dbjn',
+      //         'scope' => '',
+      //     ],
+      // ]);
+        return json_decode((string) $response->getBody(), true);
+      }
+
 }
 

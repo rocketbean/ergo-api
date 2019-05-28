@@ -14,8 +14,9 @@ use Illuminate\Http\Request;
 */
 
 Route::post('attempt', 'AuthController@grantToken');
-Route::group(['middleware' => 'auth:service'], function () {
-  Route::get('/test', function (Request $request) {
+Route::post('grant', 'AuthController@register');
+Route::group(['middleware' => 'auth:api'], function () {
+  Route::post('/test', function (Request $request) {
     return $request->user();
   });
 });
