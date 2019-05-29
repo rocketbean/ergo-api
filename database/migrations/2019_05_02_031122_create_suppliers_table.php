@@ -15,6 +15,7 @@ class CreateSuppliersTable extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('location_id')->nullable()->index();
             $table->bigInteger('user_id')->index();
             $table->bigInteger('primary')->default(2)->index();
             $table->string('name');

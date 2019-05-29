@@ -86,6 +86,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('store', 'SupplierController@store');
     Route::group(['prefix' => '{supplier}'], function () {
 
+      Route::post('show', 'SupplierController@show');
       Route::group(['prefix' => 'tag'], function () {
         Route::post('{tag}/attach', 'SupplierController@attach');
       });
@@ -110,7 +111,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
       Route::group(['prefix' => 'locations'], function () {
         Route::get('/', 'LocationController@index');
-        Route::post('store', 'SupplierController@storeLocation');
+        Route::post('store', 'LocationController@storeSuplierLocation');
       });
     });
   });

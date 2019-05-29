@@ -18,7 +18,7 @@ class SupplierController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return $user->services->load(['users']);
+        return $user->suppliers->load(['users']);
     }
 
     /**
@@ -39,12 +39,6 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $supplier = Supplier::where('id',3)->with('users')->first();
-        foreach ($supplier->users as $user) {
-            return $user->pivot->client_id;
-            # code...
-        }
-
         $supplier = Supplier::create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
@@ -54,8 +48,7 @@ class SupplierController extends Controller
 
         $client = (new AuthDriverService)->grant($request);
 
-        return Auth::user()->services()->attach($supplier->id, ['client_id' => $client['id']]);
-        return $client;
+        return Auth::user()->suppliers()->attach($supplier->id, ['client_id' => $client['id']]);
     }
 
     /**
@@ -66,7 +59,7 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        return $supplier->load(['joborders', 'photos', 'location', 'videos','users']);
     }
 
     /**

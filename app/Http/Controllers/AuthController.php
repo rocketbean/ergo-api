@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Supplier;
 use App\Services\AuthDriverService;
 use Auth;
 use GuzzleHttp\Client;
@@ -76,8 +77,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Contracts\Auth\Guard
      */
-      public function getAuthenticatedUser(Request $request)
+      public function getAuthenticatedUser(Supplier $supplier, Request $request)
       {
+
         try {
           if (! $user = JWTAuth::parseToken()->authenticate()) {
 
@@ -90,8 +92,7 @@ class AuthController extends Controller
         } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
           return response()->json(['token_absent'], $e->getStatusCode());
         }
-        return $user;
-        return $this->grantToken($user, $request);
+        return $this->grantToken($user, $supplier, $request->token);
       }
 
     /**
@@ -99,33 +100,19 @@ class AuthController extends Controller
      * User $user, Request $request
      * @return \Illuminate\Contracts\Auth\Guard
      */ 
-      public function grantToken()
+      public function grantToken(User $user, Supplier $supplier, $token)
       {
-        return (new AuthDriverService)->token();
-      //   $guzzle = new Client();
-      //   $response = $guzzle->post('http://localhost/oauth/token', [
-      //     'form_params' => [
-      //         'grant_type' => 'client_credentials',
-      //         'client_id' => '2',
-      //         'client_secret' => 'rx8RMVv3n6dna0rozZtf2wj1nGr6fTbe6US6dbjn',
-      //         'scope' => '',
-      //     ],
-      // ]);
-        return json_decode((string) $response->getBody(), true);
+        $gate = Supplier::AuthenticateRelations($user, $supplier);
+        if( $gate['guard'] ) {
+          return (new AuthDriverService)->token($supplier, $gate['client'], $token);
+        }
+
+        return;
       }
 
       public function register(Request $request)
       {
         return (new AuthDriverService)->grant($request);
-      //   $guzzle = new Client();
-      //   $response = $guzzle->post('http://localhost/oauth/token', [
-      //     'form_params' => [
-      //         'grant_type' => 'client_credentials',
-      //         'client_id' => '2',
-      //         'client_secret' => 'rx8RMVv3n6dna0rozZtf2wj1nGr6fTbe6US6dbjn',
-      //         'scope' => '',
-      //     ],
-      // ]);
         return json_decode((string) $response->getBody(), true);
       }
 

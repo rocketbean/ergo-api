@@ -2,6 +2,8 @@
 namespace App\Services;
 use Auth;
 use App\Models\User;
+use App\Models\Supplier;
+use App\Models\Client as ServiceSupplier;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -15,10 +17,9 @@ class AuthDriverService {
   protected $guzzle, $grantType;
 
   public function __construct() {
-    $token = $this->token();
     $this->grantType = 'client_credentials';
     $this->guzzle = new Client([
-      'base_uri'  => 'http://localhost/',
+      'base_uri'  => ErgoService::GetConfig('auth_url'),
     ]);
   }
   /**
@@ -26,18 +27,18 @@ class AuthDriverService {
    * User $user, Request $request
    * @return \Illuminate\Contracts\Auth\Guard
    */ 
-  public function token()
+  public function token($supplier, $client, $token)
   {
-    $guzzle = new Client;
-    $response = $guzzle->post('http://localhost/oauth/token', [
+    $client = $this->getClientCredentials($client);
+    $response = $this->guzzle->post('oauth/token', [
       'form_params' => [
           'grant_type' => 'client_credentials',
-          'client_id' => '2',
-          'client_secret' => 'rx8RMVv3n6dna0rozZtf2wj1nGr6fTbe6US6dbjn',
+          'client_id' => $client->id, //$client,
+          'client_secret' => $client->secret,//$client->secret,
           'scope' => '',
       ],
     ]);
-    return json_decode((string) $response->getBody(), true);
+    return (json_decode((string) $response->getBody(), true));
   }
 
   /**
@@ -55,5 +56,9 @@ class AuthDriverService {
       ]
     ]);
     return json_decode((string) $response->getBody(), true);
+  }
+
+  public function getClientCredentials($client) {
+    return ServiceSupplier::find($client);
   }
 }

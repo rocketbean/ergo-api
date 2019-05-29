@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('attempt', 'AuthController@grantToken');
+Route::post('attempt/{supplier}', 'AuthController@getAuthenticatedUser');
 Route::post('grant', 'AuthController@register');
 Route::group(['middleware' => 'auth:api'], function () {
   Route::post('/test', function (Request $request) {

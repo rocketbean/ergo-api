@@ -26,7 +26,7 @@ class Property extends Model
      }
 
     /**
-     * Get all of the tags for the post.
+     * Get all the [location] tagged to [Property].
      */
      public function locations () {
       return $this->morphToMany(Location::class, 'locationable');

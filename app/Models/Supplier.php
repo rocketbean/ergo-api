@@ -44,8 +44,15 @@ class Supplier extends Model
       return $this->belongsTo(User::class);
     }
 
-     public function location () {
-      return $this->morphMany(Location::class, 'locationable');
+    public function location () {
+      return $this->belongsTo(Location::class);
+    }
+
+    /**
+     * Get all the location tagged to supplier.
+     */
+     public function locations () {
+      return $this->morphToMany(Location::class, 'locationable');
      }
      
     /**
@@ -73,6 +80,14 @@ class Supplier extends Model
     }
 
     /**
+     * Get all of the [videos] for the [property].
+     */
+    public function videos()
+    {
+        return $this->morphToMany(Video::class, 'videoable');
+    }
+
+    /**
      * Get all of the [users] for the [supplier].
      */
     public function users()
@@ -95,5 +110,17 @@ class Supplier extends Model
     public function primary()
     {
         return $this->belongsTo(Photo::class, 'primary');
+    }
+
+    public static function AuthenticateRelations (User $user, Supplier $supplier) {
+        $auth = false;
+        $client = 0;
+        foreach ($user->suppliers as $key) {
+            if($supplier->id === $key->id ) {
+                $client = $key->pivot->client_id;
+                $auth = true;
+            }
+        }
+        return ['guard' => $auth, 'client' => $client];
     }
 }
