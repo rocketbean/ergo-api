@@ -17,7 +17,6 @@ class ErgoService {
   }
 
   public static function GetUser () {
-
       return config('ergo.firstuser');
   }
 }

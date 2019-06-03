@@ -1,16 +1,17 @@
 <?php
 namespace App\Services;
-use Auth;
-use App\Models\User;
-use App\Models\Supplier;
 use App\Models\Client as ServiceSupplier;
+use App\Models\Supplier;
+use App\Models\User;
+use App\Services\SessionService;
+use App\Services\UserTempStorage;
+use Auth;
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
-
-use Laravel\Passport\Http\Controllers\ClientController;
-use Laravel\Passport\ClientRepository;
-use Laravel\Passport\Http\Rules\RedirectRule;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Http\Request;
+use Laravel\Passport\ClientRepository;
+use Laravel\Passport\Http\Controllers\ClientController;
+use Laravel\Passport\Http\Rules\RedirectRule;
 
 class AuthDriverService {
 
@@ -21,21 +22,25 @@ class AuthDriverService {
     $this->guzzle = new Client([
       'base_uri'  => ErgoService::GetConfig('auth_url'),
     ]);
+    $this->userTempStorage = app(UserTempStorage::class);
   }
   /**
    * grants a passport token to the user.
    * User $user, Request $request
    * @return \Illuminate\Contracts\Auth\Guard
    */ 
-  public function token($supplier, $client, $token)
+  public function token($supplier, $client,Request $request)
   {
     $client = $this->getClientCredentials($client);
     $response = $this->guzzle->post('oauth/token', [
+      'token'       => $request->token,
       'form_params' => [
-          'grant_type' => 'client_credentials',
-          'client_id' => $client->id, //$client,
+          'grant_type'    => 'password',
+          'client_id'     => $client->id, //$client,
           'client_secret' => $client->secret,//$client->secret,
-          'scope' => '',
+          'username'      => Auth::user()->email,
+          'password'      => $this->userTempStorage->get((new ErgoService)->GetConfig('userkey')),
+          'scope'         => '*',
       ],
     ]);
     return (json_decode((string) $response->getBody(), true));
@@ -46,16 +51,19 @@ class AuthDriverService {
    * User $user, Request $request
    * @return \Illuminate\Contracts\Auth\Guard
    */ 
-  public function grant($request)
+  public function grant($request, Supplier $supplier)
   {
     $response = $this->guzzle->post('oauth/clients',[
       'form_params' => [
-        'name' => '1111',
-        'redirect' => 'http://localhost/',
-        'token' => $request->token,
+        'name'            => $supplier->name,
+        'redirect'        => 'http://localhost/',
+        'token'           => $request->token,
       ]
     ]);
-    return json_decode((string) $response->getBody(), true);
+
+    $data = json_decode((string) $response->getBody(), true);
+    ServiceSupplier::where('id', $data['id'])->update(['password_client' => 1]);
+    return $data;
   }
 
   public function getClientCredentials($client) {

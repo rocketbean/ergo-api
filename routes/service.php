@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
 
 Route::post('attempt/{supplier}', 'AuthController@getAuthenticatedUser');
 Route::post('grant', 'AuthController@register');
-Route::group(['middleware' => 'auth:api'], function () {
-  Route::post('/test', function (Request $request) {
-    return $request->user();
-  });
+Route::post('sess', 'SessionController@index');
+Route::post('sessget', 'SessionController@get');
+Route::group(['prefix' => '{supplier}','middleware' => ['auth:service']], function () {
+  Route::get('fetch', 'ServiceController@index');
 });

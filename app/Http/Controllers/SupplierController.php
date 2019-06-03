@@ -46,7 +46,7 @@ class SupplierController extends Controller
             'primary'     => 1
         ]);
 
-        $client = (new AuthDriverService)->grant($request);
+        $client = (new AuthDriverService)->grant($request, $supplier);
 
         return Auth::user()->suppliers()->attach($supplier->id, ['client_id' => $client['id']]);
     }
