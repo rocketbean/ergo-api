@@ -14,7 +14,7 @@ class JobRequest extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['items'];
+    protected $with = ['items', 'photos', 'files', 'videos', 'tags'];
 
     public function property () {
       return $this->belongsTo(Property::class);
@@ -53,7 +53,15 @@ class JobRequest extends Model
      */
     public function videos()
     {
-        return $this->morphToMany(Video::class, 'photoable');
+        return $this->morphToMany(Video::class, 'videoable');
+    }
+
+    /**
+     * Get all of the [files] for the [jobrequest].
+     */
+    public function files()
+    {
+        return $this->morphToMany(File::class, 'fileable');
     }
 
     /**

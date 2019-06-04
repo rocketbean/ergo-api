@@ -114,6 +114,11 @@ class JobRequestController extends Controller
             $item->photos()->detach($item->id);
             $item->files()->detach($item->id);
             $item->videos()->detach($item->id);
+
+            $property->photos()->detach($item->id);
+            $property->files()->detach($item->id);
+            $property->videos()->detach($item->id);
+
             $item->delete();
         }
         $jr->delete();

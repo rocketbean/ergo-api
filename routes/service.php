@@ -19,4 +19,7 @@ Route::post('sess', 'SessionController@index');
 Route::post('sessget', 'SessionController@get');
 Route::group(['prefix' => '{supplier}','middleware' => ['auth:service']], function () {
   Route::get('fetch', 'ServiceController@index');
-});
+  Route::group(['prefix' => 'stream'], function () {
+    Route::get('', 'StreamController@index');
+  });
+}); 

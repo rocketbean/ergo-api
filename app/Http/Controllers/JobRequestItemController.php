@@ -52,24 +52,32 @@ class JobRequestItemController extends Controller
         if(!empty($request->photos)) {
             foreach ($request->photos as $photo) {
                 $jri->photos()->attach($photo['id']);
+                $property->photos()->attach($photo['id']);
+                $jr->photos()->attach($photo['id']);
             }
         }
 
         if(!empty($request->files)) {
             foreach ($request->files as $file) {
                 $jri->files()->attach($file['id']);
+                $property->files()->attach($file['id']);
+                $jr->files()->attach($file['id']);
             }
         }
 
         if(!empty($request->videos)) {
             foreach ($request->videos as $video) {
                 $jri->videos()->attach($video['id']);
+                $property->videos()->attach($video['id']);
+                $jr->videos()->attach($video['id']);
             }
         }
 
         if(!empty($request->tags)) {
             foreach ($request->tags as $tag) {
                 $jri->tags()->attach($tag['value']);
+                $property->tags()->attach($tag['value']);
+                $jr->tags()->attach($tag['value']);
             }
         }
 

@@ -11,7 +11,7 @@ use App\Models\Photo;
 class Property extends Model
 {
     protected $guarded = [];
-    protected $with = ['primary'];
+    protected $with = ['primary', 'photos', 'files', 'videos'];
 
      public function owner () {
       return $this->belongsTo(User::class);
@@ -64,6 +64,13 @@ class Property extends Model
         return $this->morphToMany(Video::class, 'videoable');
     }
 
+    /**
+     * Get all of the [files] for the [property].
+     */
+    public function files()
+    {
+        return $this->morphToMany(File::class, 'fileable');
+    }
 
     /**
      * Get all of the [users] for the [property].
