@@ -104,4 +104,15 @@ class User extends Authenticatable implements JWTSubject
         return parent::newPivot($parent, $attributes, $table, $exists, $using);
     }
 
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(User $user, $model, $relation)
+    {
+        if(!$user->{$relation}->contains($model['id']))
+            $user->{$relation}()->attach($model['id']);
+
+    }
+
 }

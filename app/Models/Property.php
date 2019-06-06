@@ -79,4 +79,15 @@ class Property extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(Property $property, $model, $relation)
+    {
+        if(!$property->{$relation}->contains($model['id']))
+            $property->{$relation}()->attach($model['id']);
+
+    }
 }

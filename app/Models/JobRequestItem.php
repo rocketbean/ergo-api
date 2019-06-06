@@ -67,4 +67,13 @@ class JobRequestItem extends Model
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
+
+
+    public static function RelateTo(JobRequestItem $item, $model, $relation)
+    {
+        if(!$item->{$relation}->contains($model['id'])) {
+            $item->{$relation}()->attach($model['id']);
+        }
+
+    }
 }

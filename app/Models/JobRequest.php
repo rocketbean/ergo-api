@@ -71,4 +71,15 @@ class JobRequest extends Model
     {
         return $jr->photos()->attach($photo->id);
     }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(JobRequest $jr, $model, $relation)
+    {
+        if(!$jr->{$relation}->contains($model['id']))
+            $jr->{$relation}()->attach($model['id']);
+
+    }
 }

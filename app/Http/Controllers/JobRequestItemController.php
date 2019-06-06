@@ -48,36 +48,36 @@ class JobRequestItemController extends Controller
             'job_request_id'    => $jr->id,
             'description'       => $request->description
         ]);
-        
+
         if(!empty($request->photos)) {
             foreach ($request->photos as $photo) {
-                $jri->photos()->attach($photo['id']);
-                $property->photos()->attach($photo['id']);
-                $jr->photos()->attach($photo['id']);
+                Property::RelateTo($property, $photo, 'photos');
+                JobRequest::RelateTo($jr, $photo, 'photos');
+                JobRequestItem::RelateTo($jri, $photo, 'photos');
             }
         }
 
         if(!empty($request->files)) {
             foreach ($request->files as $file) {
-                $jri->files()->attach($file['id']);
-                $property->files()->attach($file['id']);
-                $jr->files()->attach($file['id']);
+                Property::RelateTo($property, $file, 'files');
+                JobRequest::RelateTo($jr, $file, 'files');
+                JobRequestItem::RelateTo($jri, $file, 'files');
             }
         }
 
         if(!empty($request->videos)) {
             foreach ($request->videos as $video) {
-                $jri->videos()->attach($video['id']);
-                $property->videos()->attach($video['id']);
-                $jr->videos()->attach($video['id']);
+                Property::RelateTo($property, $video, 'videos');
+                JobRequest::RelateTo($jr, $video, 'videos');
+                JobRequestItem::RelateTo($jri, $video, 'videos');
             }
         }
 
         if(!empty($request->tags)) {
             foreach ($request->tags as $tag) {
-                $jri->tags()->attach($tag['value']);
-                $property->tags()->attach($tag['value']);
-                $jr->tags()->attach($tag['value']);
+                Property::RelateTo($property, $tag, 'tags');
+                JobRequest::RelateTo($jr, $tag, 'tags');
+                JobRequestItem::RelateTo($jri, $tag, 'tags');
             }
         }
 

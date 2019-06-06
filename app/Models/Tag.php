@@ -36,6 +36,7 @@ class Tag extends Model
 
     public function toArray() {
       return [
+        'id' => $this->id,
         'value' => $this->id,
         'label' => $this->name,
         'description' => $this->description,
