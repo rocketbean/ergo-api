@@ -38,6 +38,7 @@ class JobOrderController extends Controller
      */
     public function store(Supplier $supplier, Property $property, JobRequest $jr, Request $request)
     {
+        return $request->all();
         if($jr->status_id != 1){
             return response()->json('cannot create joborder from unpublished request', 406);
         } else {

@@ -97,6 +97,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
             Route::group(['prefix' => '{jr}'], function () {
               Route::group(['prefix' => 'joborders'], function () {
                 Route::post('store', 'JobOrderController@store');
+
+                
                 Route::group(['prefix' => '{jo}'], function () {
                   Route::post('publish', 'JobOrderController@publish');
                   Route::group(['prefix' => 'items'], function () {
