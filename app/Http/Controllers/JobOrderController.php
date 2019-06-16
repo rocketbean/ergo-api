@@ -38,16 +38,29 @@ class JobOrderController extends Controller
      */
     public function store(Supplier $supplier, Property $property, JobRequest $jr, Request $request)
     {
-        return $request->all();
-        if($jr->status_id != 1){
+        if($jr->status_id == 1){
             return response()->json('cannot create joborder from unpublished request', 406);
         } else {
-            return $supplier->joborders()->create([
+            $jo = $supplier->joborders()->create([
                 'user_id'        => Auth::user()->id,
                 'property_id'    => $property->id,
                 'job_request_id' => $jr->id,
                 'remarks'        => $request->remarks,
+                'estimation'     => JobOrder::getEstimation($request->items)
             ]);
+
+            foreach ($request->items as $item) {
+                $jo->items()->create([
+                    'amount' => $item['estimation'],
+                    'remarks' => $item['description'],
+                    'user_id' => Auth::user()->id,
+                    'job_request_item_id' => $item['jr']['id'],
+                    'job_request_id' => $jr->id,
+                    'property_id' => $property->id,
+                    'supplier_id' => $supplier->id,
+                ]);
+            }
+            return $jo->load(['photos', 'files', 'videos','items']);
         }
     }
 
