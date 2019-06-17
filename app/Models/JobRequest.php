@@ -14,7 +14,7 @@ class JobRequest extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['items', 'photos', 'files', 'videos', 'tags'];
+    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'joborders'];
 
     public function property () {
       return $this->belongsTo(Property::class);
@@ -70,6 +70,14 @@ class JobRequest extends Model
     public function attachPhoto(JobRequest $jr, Photo $photo)
     {
         return $jr->photos()->attach($photo->id);
+    }
+
+    /**
+     * Get all of the photos for the jobrequest.
+     */
+    public function joborders()
+    {
+        return $this->hasMany(Joborder::class);
     }
 
 

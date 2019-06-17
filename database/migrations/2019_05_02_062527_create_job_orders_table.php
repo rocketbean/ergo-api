@@ -21,6 +21,7 @@ class CreateJobOrdersTable extends Migration
             $table->bigInteger('property_id')->index();
             $table->bigInteger('status_id')->default(2);
             $table->decimal('estimation', 8, 2);
+            $table->integer('view')->default(2);
             $table->text('remarks');
             $table->timestamps();
         });
