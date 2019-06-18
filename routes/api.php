@@ -85,7 +85,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'SupplierController@index');
     Route::post('store', 'SupplierController@store');
     Route::group(['prefix' => '{supplier}'], function () {
-
+      Route::post('update/primary/{photo}', 'SupplierController@primary');
       Route::post('show', 'SupplierController@show');
       Route::group(['prefix' => 'tag'], function () {
         Route::post('{tag}/attach', 'SupplierController@attach');

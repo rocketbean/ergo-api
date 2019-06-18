@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Property;
 use App\Models\Supplier;
 use App\Models\Tag;
+use App\Models\Photo;
 use App\Services\AuthDriverService;
 use Auth;
 use Illuminate\Http\Request;
@@ -125,5 +126,17 @@ class SupplierController extends Controller
     public function attach(Supplier $supplier, Tag $tag)
     {
         return $supplier->tags()->attach($tag->id);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function primary(Supplier $supplier, Photo $photo)
+    {
+        $supplier->update(['primary' => $photo->id]);
+        return Supplier::find($supplier->id);
     }
 }
