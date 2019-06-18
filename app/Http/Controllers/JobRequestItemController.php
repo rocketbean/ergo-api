@@ -48,7 +48,6 @@ class JobRequestItemController extends Controller
             'job_request_id'    => $jr->id,
             'description'       => $request->description
         ]);
-
         if(!empty($request->photos)) {
             foreach ($request->photos as $photo) {
                 Property::RelateTo($property, $photo, 'photos');

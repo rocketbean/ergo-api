@@ -74,4 +74,13 @@ class JobOrder extends Model
         }
       return $value;
     }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(JobOrder $jo, $model, $relation)
+    {
+        if(!$jo->{$relation}->contains($model['id']))
+            $jo->{$relation}()->attach($model['id']);
+    }
 }

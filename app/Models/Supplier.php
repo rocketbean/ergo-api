@@ -63,6 +63,15 @@ class Supplier extends Model
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
+
+    /**
+     * Get all of the [files] for the [property].
+     */
+    public function files()
+    {
+        return $this->morphToMany(File::class, 'fileable');
+    }
+
     /**
      * Get all of the tags for the post.
      */
@@ -122,5 +131,14 @@ class Supplier extends Model
             }
         }
         return ['guard' => $auth, 'client' => $client];
+    }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(Supplier $supplier, $model, $relation)
+    {
+        if(!$supplier->{$relation}->contains($model['id']))
+            $supplier->{$relation}()->attach($model['id']);
     }
 }

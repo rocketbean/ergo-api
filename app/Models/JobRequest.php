@@ -88,6 +88,5 @@ class JobRequest extends Model
     {
         if(!$jr->{$relation}->contains($model['id']))
             $jr->{$relation}()->attach($model['id']);
-
     }
 }

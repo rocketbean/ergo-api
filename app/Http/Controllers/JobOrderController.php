@@ -5,6 +5,7 @@ use Auth;
 use App\Models\JobOrder;
 use App\Models\Supplier;
 use App\Models\Property;
+use App\Models\JobOrderItem;
 use App\Models\JobRequest;
 use Illuminate\Http\Request;
 
@@ -40,6 +41,7 @@ class JobOrderController extends Controller
     {
         if($jr->status_id == 1){
             return response()->json('cannot create joborder from unpublished request', 406);
+
         } else {
             $jo = $supplier->joborders()->create([
                 'user_id'        => Auth::user()->id,
@@ -50,7 +52,7 @@ class JobOrderController extends Controller
             ]);
 
             foreach ($request->items as $item) {
-                $jo->items()->create([
+                $joi = $jo->items()->create([
                     'amount' => $item['estimation'],
                     'remarks' => $item['description'],
                     'user_id' => Auth::user()->id,
@@ -59,7 +61,39 @@ class JobOrderController extends Controller
                     'property_id' => $property->id,
                     'supplier_id' => $supplier->id,
                 ]);
+
+                if(!empty($item['photos'])) {
+                    foreach ($item['photos'] as $photo) {
+                        Supplier::RelateTo($supplier, $photo, 'photos');
+                        JobOrder::RelateTo($jo, $photo, 'photos');
+                        JobOrderItem::RelateTo($joi, $photo, 'photos');
+                    }
+                }
+
+                if(!empty($item['files'])) {
+                    foreach ($item['files'] as $file) {
+                        Supplier::RelateTo($supplier, $file, 'files');
+                        JobOrder::RelateTo($jo, $file, 'files');
+                        JobOrderItem::RelateTo($joi, $file, 'files');
+                    }
+                }
+
+                if(!empty($item['videos'])) {
+                    foreach ($item['videos'] as $video) {
+                        Supplier::RelateTo($supplier, $video, 'videos');
+                        JobOrder::RelateTo($jo, $video, 'videos');
+                        JobOrderItem::RelateTo($joi, $video, 'videos');
+                    }
+                }
+
+                if(!empty($item['tags'])) {
+                    foreach ($item['tags'] as $tag) {
+                        JobOrder::RelateTo($jo, $tag, 'tags');
+                        JobOrderItem::RelateTo($joi, $tag, 'tags');
+                    }
+                }
             }
+
             return $jo->load(['photos', 'files', 'videos','items']);
         }
     }
