@@ -51,6 +51,15 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   });
 
   /*
+    joborders
+  */
+  Route::group(['prefix' => 'joborders'], function () {
+    Route::group(['prefix' => '{jo}'], function () {
+      Route::post('viewed', 'JobOrderController@viewed');
+    });
+  });
+
+  /*
     properties
   */
   Route::group(['prefix' => 'properties'], function () {
@@ -97,7 +106,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
             Route::group(['prefix' => '{jr}'], function () {
               Route::group(['prefix' => 'joborders'], function () {
                 Route::post('store', 'JobOrderController@store');
-
                 
                 Route::group(['prefix' => '{jo}'], function () {
                   Route::post('publish', 'JobOrderController@publish');

@@ -21,6 +21,7 @@ class CreateSuppliersTable extends Migration
             $table->string('name');
             $table->string('status_id')->default(2)->index();
             $table->text('description')->nullable();
+            $table->decimal('ratings', 8, 2);
             $table->timestamps();
         });
 

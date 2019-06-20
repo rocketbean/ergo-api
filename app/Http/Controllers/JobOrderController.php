@@ -158,4 +158,11 @@ class JobOrderController extends Controller
            return $jo;
         }
     }
+
+    public function viewed (JobOrder $jo) {
+        $jo->update([
+            'view' => 1
+        ]);
+        return $jo;
+    }
 }
