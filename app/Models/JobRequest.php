@@ -24,6 +24,10 @@ class JobRequest extends Model
       return $this->belongsTo(User::class);
     }
 
+    public function approver() {
+      return $this->belongsTo(User::class, 'approved_by');
+    }
+
     /**
      * Get all of the tags for the jobrequest.
      */
@@ -88,5 +92,18 @@ class JobRequest extends Model
     {
         if(!$jr->{$relation}->contains($model['id']))
             $jr->{$relation}()->attach($model['id']);
+    }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function Approve(JobRequest $jr, JobOrder $jo, User $user)
+    {
+      $jr->update([
+        'status_id'     => 3,
+        'job_order_id'  => $jo->id,
+        'approved_by'   => $user->id,
+      ]);
+      return $jr;
     }
 }

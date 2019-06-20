@@ -16,6 +16,7 @@ class CreateJobOrdersTable extends Migration
         Schema::create('job_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
+            $table->bigInteger('approved_by')->nullable()->index();
             $table->bigInteger('job_request_id')->index();
             $table->bigInteger('supplier_id')->index();
             $table->bigInteger('property_id')->index();

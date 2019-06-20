@@ -56,6 +56,9 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   Route::group(['prefix' => 'joborders'], function () {
     Route::group(['prefix' => '{jo}'], function () {
       Route::post('viewed', 'JobOrderController@viewed');
+      Route::group(['prefix' => 'jobrequests/{jr}'], function () {
+        Route::post('confirm', 'JobOrderController@confirm');
+      });
     });
   });
 

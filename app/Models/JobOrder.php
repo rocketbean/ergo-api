@@ -15,6 +15,10 @@ class JobOrder extends Model
       return $this->belongsTo(User::class);
     }
 
+    public function approver() {
+      return $this->belongsTo(User::class, 'approved_by');
+    }
+
     public function supplier() {
       return $this->belongsTo(Supplier::class);
     }
@@ -82,5 +86,17 @@ class JobOrder extends Model
     {
         if(!$jo->{$relation}->contains($model['id']))
             $jo->{$relation}()->attach($model['id']);
+    }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function Approve(JobOrder $jo, User $user)
+    {
+      $jo->update([
+        'status_id' => 3,
+        'approved_by' => $user->id,
+      ]);
+      return $jo;
     }
 }

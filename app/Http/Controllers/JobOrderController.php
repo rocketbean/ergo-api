@@ -159,10 +159,32 @@ class JobOrderController extends Controller
         }
     }
 
+    /**
+     * Set joborder as Viewed by Client state
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
     public function viewed (JobOrder $jo) {
         $jo->update([
             'view' => 1
         ]);
         return $jo;
+    }
+
+    /**
+     * Set joborder as Approved status
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm (JobOrder $jo, JobRequest $jr) {
+        $user = Auth::user();
+        $njo  = JobOrder::Approve($jo, $user);
+        $njr  = JobRequest::Approve($jr, $jo, $user);
+        return [
+            'joborder' => $njo,
+            'jobrequest' => $njr
+        ];
     }
 }
