@@ -74,7 +74,7 @@ class JobOrder extends Model
     {
       $value = 0;
         foreach ($items as $item) {
-          $value += (float) $item['estimation'];
+          $value += (float) $item['amount'];
         }
       return $value;
     }

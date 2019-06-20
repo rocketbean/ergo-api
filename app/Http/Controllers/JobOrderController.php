@@ -53,10 +53,10 @@ class JobOrderController extends Controller
 
             foreach ($request->items as $item) {
                 $joi = $jo->items()->create([
-                    'amount' => $item['estimation'],
+                    'amount' => $item['amount'],
                     'remarks' => $item['description'],
                     'user_id' => Auth::user()->id,
-                    'job_request_item_id' => $item['jr']['id'],
+                    'job_request_item_id' => $item['jobrequestitem']['id'],
                     'job_request_id' => $jr->id,
                     'property_id' => $property->id,
                     'supplier_id' => $supplier->id,
