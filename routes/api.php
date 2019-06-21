@@ -12,11 +12,14 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('testClass', 'CoreController@testClass');
 Route::post('attempt','AuthController@login');
 Route::post('register','RegistrationController@register');
 Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.configure');
 Route::post('photological', 'CoreController@assignPhotos')->middleware('core.configure');
 Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
+Route::post('intial', 'CoreController@configure')->middleware('core.configure');
 
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::group(['prefix' => 'ergo'], function () {
