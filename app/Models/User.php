@@ -94,6 +94,14 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Supplier::class)->withPivot('client_id');
     }
 
+    /**
+     * Get all of the [notifications] for the [user].
+     */
+    public function alerts()
+    {
+        return $this->morphToMany(Alert::class, 'alertable');
+    }
+
 
     public function newPivot(Model $parent, array $attributes, $table, $exists,  $using = null)
     {

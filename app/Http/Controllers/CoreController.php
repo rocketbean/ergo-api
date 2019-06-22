@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\Property;
 use App\Models\Photo;
 use App\Models\Tag;
+use App\Models\Alert;
 use App\Services\ErgoService;
 use App\Services\SupplierNotification;
 use App\Services\PropertyNotification;
@@ -100,13 +101,6 @@ class CoreController extends Controller
     }
 
     public function testClass () {
-        // $supn = new SupplierNotification(Supplier::find(1), 'getters');
-        $actions = [];
-        $action1 =(new ActionActive(['actionname' => 'jobrequest', 'value' => JobRequest::first()]))->process();
-        $action2 =(new ActionModal(['actionname' => '_modals', 'value' => '{"addJrItem": { "open": true }}']))->process();
-        array_push($actions, $action1);
-        array_push($actions, $action2);
-        return $actions;
-        // return (new NotificationService)->process($supn);
+        return Alert::get();
     }
 }

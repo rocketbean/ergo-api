@@ -22,6 +22,8 @@ Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configu
 Route::post('intial', 'CoreController@configure')->middleware('core.configure');
 
 Route::group(['middleware' => 'jwt.auth'], function () {
+  Route::post('alerts', 'AlertController@index');
+  
   Route::group(['prefix' => 'ergo'], function () {
     Route::get('countries', 'CoreController@countries');
     Route::get('tags', 'CoreController@tags');

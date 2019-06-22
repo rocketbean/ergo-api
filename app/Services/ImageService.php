@@ -18,10 +18,9 @@ class ImageService {
     $img = Image::make($image->getRealPath());
     $img->stream();
     Storage::disk('local')->put('public/' . $filepath, $img, 'public');
-    $thumb = $img->resize(65, 65, function ($constraint) {
-        $constraint->aspectRatio();                 
-    });
-    Storage::disk('local')->put('public/' . $thumbfilepath, $img, 'public');
+    $thumb = $img->resize(65, 65);
+    $thumb->stream();
+    Storage::disk('local')->put('public/' . $thumbfilepath, $thumb, 'public');
     return $this->returnObj($filepath, $thumbfilepath, $image->getClientOriginalExtension(),$fileName);
   }
 
