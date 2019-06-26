@@ -118,7 +118,7 @@ class AuthController extends Controller
       public function register(Request $request, Supplier $supplier)
       {
         return (new AuthDriverService)->grant($request);
-        return json_decode((string) $response->getBody(), true);
+        // return json_decode((string) $response->getBody(), true);
       }
 
 }

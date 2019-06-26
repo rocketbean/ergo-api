@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobRequest;
+use App\Models\Supplier;
+
 use Illuminate\Http\Request;
 
 class StreamController extends Controller
@@ -12,9 +14,13 @@ class StreamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Supplier $supplier)
     {
-        return JobRequest::get()->load(['property']);
+        // return JobRequest::get();
+        return JobRequest::whereDoesntHave('joborders', function($query) use ($supplier) {
+          $query->whereIn('supplier_id', [ $supplier->id]);
+        })->get()->load('property');
+        
     }
 
     /**

@@ -99,7 +99,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function alerts()
     {
-        return $this->morphToMany(Alert::class, 'alertable');
+        return $this->hasMany(Alert::class);
     }
 
 

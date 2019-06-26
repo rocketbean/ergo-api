@@ -21,6 +21,8 @@ Route::post('photological', 'CoreController@assignPhotos')->middleware('core.con
 Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
 Route::post('intial', 'CoreController@configure')->middleware('core.configure');
 
+  Route::post('alerts/create', 'AlertController@create');
+
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::post('alerts', 'AlertController@index');
   
