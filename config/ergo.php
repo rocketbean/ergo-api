@@ -32,13 +32,19 @@ return [
 
   'driver' => [
     'local' => [
-      'status' => 'configurable'
+      'status'    => 'configurable',
+      'auth_url'  => 'http://localhost/',
+      'userkey'   => '_key'
     ],
     'dev' => [
-      'status' => 'configurable'
+      'status'    => 'configurable',
+      'auth_url'  => 'http://localhost/',
+      'userkey'   => '_key'
     ],
     'prod' => [
-      'status' => 'configurable'
+      'status' => 'configurable',
+      'auth_url' => 'http://localhost/',
+      'userkey'   => '_key'
     ]
   ],
 

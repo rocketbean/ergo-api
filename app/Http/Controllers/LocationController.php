@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\Location;
 use App\Models\Property;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
@@ -16,6 +17,16 @@ class LocationController extends Controller
     public function index(Property $property)
     {
         return $property->location;
+    }
+
+    /**
+     * supplies the service location.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function ServiceLocation(Supplier $supplier)
+    {
+        return $supplier->location;
     }
 
     /**
@@ -50,6 +61,30 @@ class LocationController extends Controller
         ]);
         $property->update(['location_id' => $location->id]);
         return $property->load(['jobrequests', 'photos', 'location', 'videos']);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeSuplierLocation(Supplier $supplier, Request $request)
+    {
+        $location = Location::create([
+            'locationable_id'    => $supplier->id,
+            'locationable_type'  => Supplier::class,
+            'user_id'            => Auth::user()->id,
+            'address1'           => $request->address1,
+            'address2'           => $request->address2,
+            'city'               => $request->city,
+            'state'              => $request->state,
+            'country'            => $request->country,
+            'lat'                => $request->lat,
+            'lng'                => $request->lng,
+        ]);
+        $supplier->update(['location_id' => $location->id]);
+        return $supplier->load(['joborders', 'photos', 'location', 'videos']);
     }
 
     /**

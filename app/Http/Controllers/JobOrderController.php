@@ -5,6 +5,7 @@ use Auth;
 use App\Models\JobOrder;
 use App\Models\Supplier;
 use App\Models\Property;
+use App\Models\JobOrderItem;
 use App\Models\JobRequest;
 use Illuminate\Http\Request;
 
@@ -38,15 +39,62 @@ class JobOrderController extends Controller
      */
     public function store(Supplier $supplier, Property $property, JobRequest $jr, Request $request)
     {
-        if($jr->status_id != 1){
+        if($jr->status_id == 1){
             return response()->json('cannot create joborder from unpublished request', 406);
+
         } else {
-            return $supplier->joborders()->create([
+            $jo = $supplier->joborders()->create([
                 'user_id'        => Auth::user()->id,
                 'property_id'    => $property->id,
                 'job_request_id' => $jr->id,
                 'remarks'        => $request->remarks,
+                'estimation'     => JobOrder::getEstimation($request->items)
             ]);
+
+            foreach ($request->items as $item) {
+                $joi = $jo->items()->create([
+                    'amount' => $item['amount'],
+                    'remarks' => $item['description'],
+                    'user_id' => Auth::user()->id,
+                    'job_request_item_id' => $item['jobrequestitem']['id'],
+                    'job_request_id' => $jr->id,
+                    'property_id' => $property->id,
+                    'supplier_id' => $supplier->id,
+                ]);
+
+                if(!empty($item['photos'])) {
+                    foreach ($item['photos'] as $photo) {
+                        Supplier::RelateTo($supplier, $photo, 'photos');
+                        JobOrder::RelateTo($jo, $photo, 'photos');
+                        JobOrderItem::RelateTo($joi, $photo, 'photos');
+                    }
+                }
+
+                if(!empty($item['files'])) {
+                    foreach ($item['files'] as $file) {
+                        Supplier::RelateTo($supplier, $file, 'files');
+                        JobOrder::RelateTo($jo, $file, 'files');
+                        JobOrderItem::RelateTo($joi, $file, 'files');
+                    }
+                }
+
+                if(!empty($item['videos'])) {
+                    foreach ($item['videos'] as $video) {
+                        Supplier::RelateTo($supplier, $video, 'videos');
+                        JobOrder::RelateTo($jo, $video, 'videos');
+                        JobOrderItem::RelateTo($joi, $video, 'videos');
+                    }
+                }
+
+                if(!empty($item['tags'])) {
+                    foreach ($item['tags'] as $tag) {
+                        JobOrder::RelateTo($jo, $tag, 'tags');
+                        JobOrderItem::RelateTo($joi, $tag, 'tags');
+                    }
+                }
+            }
+
+            return $jo->load(['photos', 'files', 'videos','items']);
         }
     }
 
@@ -109,5 +157,34 @@ class JobOrderController extends Controller
            $jo->update(['status_id' => 1]);
            return $jo;
         }
+    }
+
+    /**
+     * Set joborder as Viewed by Client state
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function viewed (JobOrder $jo) {
+        $jo->update([
+            'view' => 1
+        ]);
+        return $jo;
+    }
+
+    /**
+     * Set joborder as Approved status
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm (JobOrder $jo, JobRequest $jr) {
+        $user = Auth::user();
+        $njo  = JobOrder::Approve($jo, $user);
+        $njr  = JobRequest::Approve($jr, $jo, $user);
+        return [
+            'joborder' => $njo,
+            'jobrequest' => $njr
+        ];
     }
 }

@@ -19,6 +19,7 @@ class CreateTagsTable extends Migration
             $table->string('description')->nullable();
             $table->string('icon')->nullable();
             $table->timestamps();
+            $table->unique(['name', 'icon']);
         });
 
         Schema::create('taggables', function (Blueprint $table) {

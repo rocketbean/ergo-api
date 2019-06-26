@@ -48,22 +48,35 @@ class JobRequestItemController extends Controller
             'job_request_id'    => $jr->id,
             'description'       => $request->description
         ]);
-        
         if(!empty($request->photos)) {
             foreach ($request->photos as $photo) {
-                $jri->photos()->attach($photo['id']);
+                Property::RelateTo($property, $photo, 'photos');
+                JobRequest::RelateTo($jr, $photo, 'photos');
+                JobRequestItem::RelateTo($jri, $photo, 'photos');
             }
         }
 
-        if(!empty($request->photos)) {
-            foreach ($request->photos as $photo) {
-                $jri->photos()->attach($photo['id']);
+        if(!empty($request->files)) {
+            foreach ($request->files as $file) {
+                Property::RelateTo($property, $file, 'files');
+                JobRequest::RelateTo($jr, $file, 'files');
+                JobRequestItem::RelateTo($jri, $file, 'files');
             }
         }
 
-        if(!empty($request->photos)) {
-            foreach ($request->photos as $photo) {
-                $jri->photos()->attach($photo['id']);
+        if(!empty($request->videos)) {
+            foreach ($request->videos as $video) {
+                Property::RelateTo($property, $video, 'videos');
+                JobRequest::RelateTo($jr, $video, 'videos');
+                JobRequestItem::RelateTo($jri, $video, 'videos');
+            }
+        }
+
+        if(!empty($request->tags)) {
+            foreach ($request->tags as $tag) {
+                Property::RelateTo($property, $tag, 'tags');
+                JobRequest::RelateTo($jr, $tag, 'tags');
+                JobRequestItem::RelateTo($jri, $tag, 'tags');
             }
         }
 
@@ -110,9 +123,13 @@ class JobRequestItemController extends Controller
      * @param  \App\Models\JobRequestItem  $jobRequestItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(JobRequestItem $jobRequestItem)
+    public function destroy(JobRequest $jr, JobRequestItem $item)
     {
-        //
+        $item->photos()->detach($item->id);
+        $item->files()->detach($item->id);
+        $item->videos()->detach($item->id);
+        $item->delete();
+        return $jr->load('items');
     }
 
     /**

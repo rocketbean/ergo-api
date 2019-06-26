@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\Property;
 use App\Models\JobRequest;
 use App\Models\JobOrder;
+use App\Models\Photo;
 use Illuminate\Http\Request;
 
 class JobOrderItemController extends Controller
@@ -49,6 +50,8 @@ class JobOrderItemController extends Controller
             'remarks'             => $request->remarks,
             'amount'              => $request->amount,
         ]);
+
+
     }
 
     /**

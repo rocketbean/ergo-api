@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'api',
         'passwords' => 'users',
     ],
 
@@ -37,7 +37,7 @@ return [
 
     'guards' => [
         'web' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'users',
         ],
 
@@ -45,6 +45,11 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
             'hash' => false,
+        ],
+
+        'service' => [
+            'driver' => 'passport',
+            'provider' => 'users',
         ],
     ],
 
@@ -71,10 +76,6 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

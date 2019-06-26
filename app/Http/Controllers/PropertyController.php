@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Auth;
 use App\Models\Property;
+use App\Models\Photo;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -101,5 +102,17 @@ class PropertyController extends Controller
     public function attach(Property $property, Tag $tag)
     {
         return $property->tags()->attach($tag->id);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function primary(Property $property, Photo $photo)
+    {
+        $property->update(['primary' => $photo->id]);
+        return Property::find($property->id);
     }
 }

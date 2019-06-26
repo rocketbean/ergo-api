@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Models\Photo;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
+    use Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +39,10 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+    ];
+
+    protected $with = [
+        'suppliers'
     ];
 
     public static function validate(Request $request)
@@ -79,4 +85,42 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->morphToMany(Video::class, 'videoable');
     }
+
+    /**
+     * Get all of the [photos] for the [user].
+     */
+    public function suppliers()
+    {
+        return $this->belongsToMany(Supplier::class)->withPivot('client_id');
+    }
+
+    /**
+     * Get all of the [notifications] for the [user].
+     */
+    public function alerts()
+    {
+        return $this->hasMany(Alert::class);
+    }
+
+
+    public function newPivot(Model $parent, array $attributes, $table, $exists,  $using = null)
+    {
+        if ($parent instanceof User) {
+            return SupplierUser::fromRawAttributes($parent, $attributes, $table, $exists, $using);
+        }
+
+        return parent::newPivot($parent, $attributes, $table, $exists, $using);
+    }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(User $user, $model, $relation)
+    {
+        if(!$user->{$relation}->contains($model['id']))
+            $user->{$relation}()->attach($model['id']);
+
+    }
+
 }

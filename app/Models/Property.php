@@ -11,9 +11,9 @@ use App\Models\Photo;
 class Property extends Model
 {
     protected $guarded = [];
-    protected $with = ['primary'];
+    protected $with = ['primary', 'photos', 'files', 'videos'];
 
-     public function user () {
+     public function owner () {
       return $this->belongsTo(User::class);
      }
 
@@ -26,7 +26,7 @@ class Property extends Model
      }
 
     /**
-     * Get all of the tags for the post.
+     * Get all the [location] tagged to [Property].
      */
      public function locations () {
       return $this->morphToMany(Location::class, 'locationable');
@@ -64,6 +64,13 @@ class Property extends Model
         return $this->morphToMany(Video::class, 'videoable');
     }
 
+    /**
+     * Get all of the [files] for the [property].
+     */
+    public function files()
+    {
+        return $this->morphToMany(File::class, 'fileable');
+    }
 
     /**
      * Get all of the [users] for the [property].
@@ -71,5 +78,16 @@ class Property extends Model
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(Property $property, $model, $relation)
+    {
+        if(!$property->{$relation}->contains($model['id']))
+            $property->{$relation}()->attach($model['id']);
+
     }
 }

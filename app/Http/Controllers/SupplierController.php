@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Auth;
-use App\Models\Supplier;
 use App\Models\Property;
+use App\Models\Supplier;
 use App\Models\Tag;
+use App\Models\Photo;
+use App\Services\AuthDriverService;
+use Auth;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -16,7 +18,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        return $user->suppliers->load(['users']);
     }
 
     /**
@@ -37,11 +40,16 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        return Supplier::create([
+        $supplier = Supplier::create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
-            'description' => $request->description
+            'description' => $request->description,
+            'primary'     => 1
         ]);
+
+        $client = (new AuthDriverService)->grant($request, $supplier);
+
+        return Auth::user()->suppliers()->attach($supplier->id, ['client_id' => $client['id']]);
     }
 
     /**
@@ -52,7 +60,7 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        return $supplier->load(['joborders', 'photos', 'location', 'videos','users']);
     }
 
     /**
@@ -118,5 +126,17 @@ class SupplierController extends Controller
     public function attach(Supplier $supplier, Tag $tag)
     {
         return $supplier->tags()->attach($tag->id);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function primary(Supplier $supplier, Photo $photo)
+    {
+        $supplier->update(['primary' => $photo->id]);
+        return Supplier::find($supplier->id);
     }
 }

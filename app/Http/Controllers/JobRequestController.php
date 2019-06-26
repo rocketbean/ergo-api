@@ -108,8 +108,20 @@ class JobRequestController extends Controller
      * @param  \App\Models\JobRequest  $jobRequest
      * @return \Illuminate\Http\Response
      */
-    public function destroy(JobRequest $jobRequest)
+    public function destroy(Property $property, JobRequest $jr)
     {
-        //
+        foreach ($jr->items as $item) {
+            $item->photos()->detach($item->id);
+            $item->files()->detach($item->id);
+            $item->videos()->detach($item->id);
+
+            $property->photos()->detach($item->id);
+            $property->files()->detach($item->id);
+            $property->videos()->detach($item->id);
+
+            $item->delete();
+        }
+        $jr->delete();
+        return $property->load(['jobrequests', 'photos', 'location', 'videos','users']);
     }
 }

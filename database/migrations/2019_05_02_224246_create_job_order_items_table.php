@@ -22,7 +22,7 @@ class CreateJobOrderItemsTable extends Migration
             $table->bigInteger('property_id')->index();
             $table->bigInteger('supplier_id')->index();
             $table->integer('status')->default()->index();
-            $table->string('remarks');
+            $table->text('remarks');
             $table->float('amount', 8, 2);
             $table->timestamps();
         });

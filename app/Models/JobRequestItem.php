@@ -12,7 +12,7 @@ class JobRequestItem extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['photos', 'videos', 'files'];
+    protected $with = ['photos', 'videos', 'files', 'tags'];
 
     public function user () {
       return $this->belongsTo(User::class);
@@ -58,5 +58,22 @@ class JobRequestItem extends Model
     public function files()
     {
         return $this->morphToMany(File::class, 'fileable');
+    }
+
+    /**
+     * Get all of the [tags] for the jobrequest items.
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+
+    public static function RelateTo(JobRequestItem $item, $model, $relation)
+    {
+        if(!$item->{$relation}->contains($model['id'])) {
+            $item->{$relation}()->attach($model['id']);
+        }
+
     }
 }

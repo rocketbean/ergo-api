@@ -14,7 +14,7 @@ class JobRequest extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['items'];
+    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'joborders', 'property'];
 
     public function property () {
       return $this->belongsTo(Property::class);
@@ -22,6 +22,10 @@ class JobRequest extends Model
 
     public function user () {
       return $this->belongsTo(User::class);
+    }
+
+    public function approver() {
+      return $this->belongsTo(User::class, 'approved_by');
     }
 
     /**
@@ -53,7 +57,15 @@ class JobRequest extends Model
      */
     public function videos()
     {
-        return $this->morphToMany(Video::class, 'photoable');
+        return $this->morphToMany(Video::class, 'videoable');
+    }
+
+    /**
+     * Get all of the [files] for the [jobrequest].
+     */
+    public function files()
+    {
+        return $this->morphToMany(File::class, 'fileable');
     }
 
     /**
@@ -62,5 +74,36 @@ class JobRequest extends Model
     public function attachPhoto(JobRequest $jr, Photo $photo)
     {
         return $jr->photos()->attach($photo->id);
+    }
+
+    /**
+     * Get all of the photos for the jobrequest.
+     */
+    public function joborders()
+    {
+        return $this->hasMany(Joborder::class);
+    }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function RelateTo(JobRequest $jr, $model, $relation)
+    {
+        if(!$jr->{$relation}->contains($model['id']))
+            $jr->{$relation}()->attach($model['id']);
+    }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function Approve(JobRequest $jr, JobOrder $jo, User $user)
+    {
+      $jr->update([
+        'status_id'     => 3,
+        'job_order_id'  => $jo->id,
+        'approved_by'   => $user->id,
+      ]);
+      return $jr;
     }
 }
