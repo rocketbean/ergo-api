@@ -35,7 +35,7 @@ class AlertController extends Controller
             'title' => $jo->property->name,
             'message' => $jo->name . ' has been approved',
             'data' => serialize([
-                (object) ['_activate' => (object) ['jobrequest' => 'subject']],
+                (object) ['_activate' => (object) ['joborder' => 'subject']],
                 (object) ['_modals' => (object) ['joborderModal' => (object) ['open'=> true]]]
              ])
         ]);
