@@ -101,6 +101,6 @@ class CoreController extends Controller
     }
 
     public function testClass () {
-        return Alert::get();
+        // return Alert::get();
     }
 }

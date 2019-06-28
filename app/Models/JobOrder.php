@@ -9,7 +9,7 @@ class JobOrder extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['photos', 'files', 'videos','items', 'supplier', 'property'];
+    protected $with = ['photos', 'files', 'videos','items', 'supplier', 'property' , 'jobrequest'];
 
     public function user() {
       return $this->belongsTo(User::class);
@@ -24,7 +24,7 @@ class JobOrder extends Model
     }
 
     public function jobrequest() {
-      return $this->belongsTo(JobRequest::class);
+      return $this->belongsTo(JobRequest::class, 'job_request_id');
     }
 
     public function property() {

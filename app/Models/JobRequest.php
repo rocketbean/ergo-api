@@ -13,8 +13,8 @@ use App\Models\Video;
 class JobRequest extends Model
 {
     protected $guarded = [];
-
-    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'joborders', 'property'];
+        //
+    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'property'];
 
     public function property () {
       return $this->belongsTo(Property::class);

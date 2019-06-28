@@ -16,9 +16,9 @@ class JobOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(JobOrder $jo)
     {
-        //
+        return $jo;
     }
 
     /**

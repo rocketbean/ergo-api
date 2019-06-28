@@ -1,5 +1,6 @@
 <?php
 
+use App\Notifications\newQuote;
 use Illuminate\Http\Request;
 
 /*
@@ -21,7 +22,12 @@ Route::post('photological', 'CoreController@assignPhotos')->middleware('core.con
 Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
 Route::post('intial', 'CoreController@configure')->middleware('core.configure');
 
-  Route::post('alerts/create', 'AlertController@create');
+Route::post('alerts/create', function () {
+  $user = Auth::user();
+  $jr = \App\Models\JobRequest::find(1)->load(['property']);
+  $jo = \App\Models\JobOrder::find(1)->load(['property']);
+  return $user->notify(new newQuote($jr, $jo));
+});
 
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::post('alerts', 'AlertController@index');
@@ -48,6 +54,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   */
   Route::group(['prefix' => 'jobrequests'], function () {
     Route::group(['prefix' => '{jr}'], function () {
+      Route::post('/', 'JobRequestController@index');
       Route::group(['prefix' => 'items/{item}'], function () {
         Route::post('destroy', 'JobRequestItemController@destroy');
         Route::group(['prefix' => 'photos/{photo}'], function () {
@@ -62,6 +69,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   */
   Route::group(['prefix' => 'joborders'], function () {
     Route::group(['prefix' => '{jo}'], function () {
+      Route::post('/', 'JobOrderController@index');
       Route::post('viewed', 'JobOrderController@viewed');
       Route::group(['prefix' => 'jobrequests/{jr}'], function () {
         Route::post('confirm', 'JobOrderController@confirm');

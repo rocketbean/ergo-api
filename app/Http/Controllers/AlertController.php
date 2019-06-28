@@ -16,7 +16,7 @@ class AlertController extends Controller
      */
     public function index()
     {
-        return Auth::user()->alerts;
+        return Auth::user()->notifications;
     }
 
     /**
@@ -26,8 +26,8 @@ class AlertController extends Controller
      */
     public function create()
     {
-        $jr = JobRequest::find(2)->load('property');
-        $jo = JobOrder::find(2)->load('property');
+        $jr = JobRequest::find(2)->load(['property']);
+        $jo = JobOrder::find(2)->load(['property']);
         Alert::create([
             'user_id' => 1,
             'subjectable_id' => $jo->id,
