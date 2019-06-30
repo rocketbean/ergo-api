@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Auth;
+use App\Notifications\newQuote;
 use App\Models\JobOrder;
 use App\Models\Supplier;
 use App\Models\Property;
@@ -93,7 +94,7 @@ class JobOrderController extends Controller
                     }
                 }
             }
-
+            $property->owner->notify(new newQuote($jo, $jr, $supplier));
             return $jo->load(['photos', 'files', 'videos','items']);
         }
     }

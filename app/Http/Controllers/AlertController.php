@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JobRequest;
+use App\Http\Resources\NotificationResource;
+use App\Http\Resources\NotificationResourceCollection;
 use App\Models\JobOrder;
-use App\Models\Alert;
-use Illuminate\Http\Request;
+use App\Models\JobRequest;
 use Auth;
+use Illuminate\Http\Request;
 class AlertController extends Controller
 {
     /**
@@ -16,7 +17,7 @@ class AlertController extends Controller
      */
     public function index()
     {
-        return Auth::user()->notifications;
+        return new NotificationResourceCollection( Auth::user()->notifications );
     }
 
     /**

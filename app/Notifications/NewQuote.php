@@ -10,15 +10,17 @@ use Illuminate\Notifications\Messages\MailMessage;
 class NewQuote extends Notification
 {
     use Queueable;
-
+    public $jo, $jr, $subject, $type, $body;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($jo, $jr, $subject)
     {
-        //
+        $this->jo = $jo;
+        $this->jr = $jr;
+        $this->subject = $subject;
     }
 
     /**
@@ -42,9 +44,11 @@ class NewQuote extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title'     => 'test',
-            'message'   => 'test',
-            '_modals'   => (object) ['addJrItem' => (object) ['open'=> true, 'data' => ['jobrequest' => 1, 'joborder' => 1 ]]]
+            'title'     => $this->subject->name,
+            'message'   => $this->subject->name . ' has submitted a quotation',
+            'subject' => $this->subject->id,
+            'subject_type' => class_basename($this->subject),
+            '_modals'   => (object) ['joborderModal' => (object) ['open'=> true, 'data' => ['jobrequest' => $this->jr->id, 'joborder' => $this->jo->id ]]]
         ];
     }
 }

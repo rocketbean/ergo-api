@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Property;
+use App\Models\Supplier;
 use App\Notifications\newQuote;
 use Illuminate\Http\Request;
 
@@ -26,7 +28,8 @@ Route::post('alerts/create', function () {
   $user = Auth::user();
   $jr = \App\Models\JobRequest::find(1)->load(['property']);
   $jo = \App\Models\JobOrder::find(1)->load(['property']);
-  return $user->notify(new newQuote($jr, $jo));
+  $property = Supplier::findorfail(1);
+  return $user->notify(new newQuote($jr, $jo, $property));
 });
 
 Route::group(['middleware' => 'jwt.auth'], function () {
