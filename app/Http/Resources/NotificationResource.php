@@ -23,6 +23,7 @@ class NotificationResource extends JsonResource
                 'subject'   => $model::find($this->data["subject"]),
                 '_modals'   => $this->data["_modals"],
             ],
+            'stamp' => $this->created_at,
             'created_at' => Carbon::parse($this->created_at)->diffForHumans()
         ];
     }

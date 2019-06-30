@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use Auth;
-use App\Notifications\newQuote;
 use App\Models\JobOrder;
-use App\Models\Supplier;
-use App\Models\Property;
 use App\Models\JobOrderItem;
 use App\Models\JobRequest;
+use App\Models\Property;
+use App\Models\Supplier;
+use App\Notifications\approveJobOrder;
+use App\Notifications\newQuote;
+use Auth;
 use Illuminate\Http\Request;
 
 class JobOrderController extends Controller
@@ -183,9 +184,11 @@ class JobOrderController extends Controller
         $user = Auth::user();
         $njo  = JobOrder::Approve($jo, $user);
         $njr  = JobRequest::Approve($jr, $jo, $user);
+        $jr->property->owner->notify(new approveJobOrder($jo, $jr, $jr->property));
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
         ];
+
     }
 }
