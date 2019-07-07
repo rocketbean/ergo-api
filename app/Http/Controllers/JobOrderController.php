@@ -184,7 +184,7 @@ class JobOrderController extends Controller
         $user = Auth::user();
         $njo  = JobOrder::Approve($jo, $user);
         $njr  = JobRequest::Approve($jr, $jo, $user);
-        $jr->property->owner->notify(new approveJobOrder($jo, $jr, $jr->property));
+        $jo->supplier->user->notify(new approveJobOrder($jo, $jr, $jr->property));
         return [
             'joborder' => $njo,
             'jobrequest' => $njr

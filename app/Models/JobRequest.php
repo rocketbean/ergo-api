@@ -84,6 +84,14 @@ class JobRequest extends Model
         return $this->hasMany(Joborder::class);
     }
 
+    /**
+     * Get all of the photos for the jobrequest.
+     */
+    public function joborder()
+    {
+        return $this->belongsTo(Joborder::class, 'job_order_id');
+    }
+
 
     /**
      * Get all of the [users] for the [property].
