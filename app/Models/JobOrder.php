@@ -99,4 +99,16 @@ class JobOrder extends Model
       ]);
       return $jo;
     }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function Confirm(JobOrder $jo, User $user)
+    {
+      $jo->update([
+        'status_id' => 4,
+      ]);
+      return $jo;
+    }
 }

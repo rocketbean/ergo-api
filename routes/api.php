@@ -22,7 +22,7 @@ Route::post('register','RegistrationController@register');
 Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.configure');
 Route::post('photological', 'CoreController@assignPhotos')->middleware('core.configure');
 Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
-Route::post('intial', 'CoreController@configure')->middleware('core.configure');
+Route::post('initial', 'CoreController@configure')->middleware('core.configure');
 
 Route::post('alerts/create', function () {
   $user = Auth::user();
@@ -75,6 +75,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
       Route::post('/', 'JobOrderController@index');
       Route::post('viewed', 'JobOrderController@viewed');
       Route::group(['prefix' => 'jobrequests/{jr}'], function () {
+        Route::post('approve', 'JobOrderController@approve');
         Route::post('confirm', 'JobOrderController@confirm');
       });
     });

@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class approveJobOrder extends Notification
+class confirmJobOrder extends Notification
 {
     use Queueable;
     public $jo, $jr, $subject, $type, $body;

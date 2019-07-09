@@ -114,4 +114,15 @@ class JobRequest extends Model
       ]);
       return $jr;
     }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public static function Approve(JobRequest $jr, JobOrder $jo, User $user)
+    {
+      $jr->update([
+        'status_id'     => 4,
+      ]);
+      return $jr;
+    }
 }

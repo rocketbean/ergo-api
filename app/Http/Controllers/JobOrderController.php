@@ -180,11 +180,29 @@ class JobOrderController extends Controller
      * @param  \App\Models\JobOrder  $jobOrder
      * @return \Illuminate\Http\Response
      */
-    public function confirm (JobOrder $jo, JobRequest $jr) {
+    public function approve (JobOrder $jo, JobRequest $jr) {
         $user = Auth::user();
         $njo  = JobOrder::Approve($jo, $user);
         $njr  = JobRequest::Approve($jr, $jo, $user);
         $jo->supplier->user->notify(new approveJobOrder($jo, $jr, $jr->property));
+        return [
+            'joborder' => $njo,
+            'jobrequest' => $njr
+        ];
+
+    }
+
+    /**
+     * Set joborder as confirmed status
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm (JobOrder $jo, JobRequest $jr) {
+        $user = Auth::user();
+        $njo  = JobOrder::Confirm($jo, $user);
+        $njr  = JobRequest::Confirm($jr, $jo, $user);
+        $jr->property->user->notify(new confirmJobOrder($jo, $jr, $jr->property));
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
