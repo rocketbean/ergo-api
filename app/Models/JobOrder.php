@@ -89,7 +89,7 @@ class JobOrder extends Model
     }
 
     /**
-     * Get all of the [users] for the [property].
+     * Set joborder as Approve status
      */
     public static function Approve(JobOrder $jo, User $user)
     {
@@ -102,9 +102,32 @@ class JobOrder extends Model
 
 
     /**
-     * Get all of the [users] for the [property].
+     * Set joborder as Confirm status
      */
     public static function Confirm(JobOrder $jo, User $user)
+    {
+      $jo->update([
+        'status_id' => 4,
+      ]);
+      return $jo;
+    }
+
+
+    /**
+     * Set joborder as Completed status
+     */
+    public static function Complete(JobOrder $jo, User $user)
+    {
+      $jo->update([
+        'status_id' => 5,
+      ]);
+      return $jo;
+    }
+
+    /**
+     * Set joborder as inProgress status
+     */
+    public static function InProgress(JobOrder $jo, User $user)
     {
       $jo->update([
         'status_id' => 4,

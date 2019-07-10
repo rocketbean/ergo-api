@@ -44,11 +44,11 @@ class approveJobOrder extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'title'     => $this->subject->name,
-            'message'   => $this->subject->name . ' has approved your quotation.',
-            'subject' => $this->subject->id,
+            'title'        => $this->subject->name,
+            'message'      => $this->subject->name . ' has approved your quotation.',
+            'subject'      => $this->subject->id,
             'subject_type' => class_basename($this->subject),
-            '_modals'   => (object) ['jobrequestView' => (object) ['open'=> true, 'data' => ['jobrequest' => $this->jr->id, 'joborder' => $this->jo->id ]]]
+            '_modals'      => (object) ['jobrequestView' => (object) ['open'=> true, 'data' => ['jobrequest' => $this->jr->id, 'joborder' => $this->jo->id ]]]
         ];
     }
 }

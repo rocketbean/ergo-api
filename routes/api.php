@@ -77,6 +77,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
       Route::group(['prefix' => 'jobrequests/{jr}'], function () {
         Route::post('approve', 'JobOrderController@approve');
         Route::post('confirm', 'JobOrderController@confirm');
+        Route::post('rollback', 'JobOrderController@rollback');
+        Route::post('complete', 'JobOrderController@complete');
       });
     });
   });
