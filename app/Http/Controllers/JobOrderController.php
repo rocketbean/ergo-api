@@ -26,6 +26,16 @@ class JobOrderController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function joborders(Supplier $supplier)
+    {
+        return $supplier->joborders;
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
