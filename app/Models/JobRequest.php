@@ -13,8 +13,8 @@ use App\Models\Video;
 class JobRequest extends Model
 {
     protected $guarded = [];
-
-    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'joborders', 'property'];
+        //
+    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'property'];
 
     public function property () {
       return $this->belongsTo(Property::class);
@@ -84,6 +84,14 @@ class JobRequest extends Model
         return $this->hasMany(Joborder::class);
     }
 
+    /**
+     * Get all of the photos for the jobrequest.
+     */
+    public function joborder()
+    {
+        return $this->belongsTo(Joborder::class, 'job_order_id');
+    }
+
 
     /**
      * Get all of the [users] for the [property].
@@ -95,7 +103,7 @@ class JobRequest extends Model
     }
 
     /**
-     * Get all of the [users] for the [property].
+     * Set joborder as Approve status
      */
     public static function Approve(JobRequest $jr, JobOrder $jo, User $user)
     {
@@ -103,6 +111,39 @@ class JobRequest extends Model
         'status_id'     => 3,
         'job_order_id'  => $jo->id,
         'approved_by'   => $user->id,
+      ]);
+      return $jr;
+    }
+
+    /**
+     * Set joborder as Confirm status
+     */
+    public static function Confirm(JobRequest $jr, JobOrder $jo, User $user)
+    {
+      $jr->update([
+        'status_id'     => 4,
+      ]);
+      return $jr;
+    }
+
+    /**
+     * Set joborder as completed status
+     */
+    public static function Complete(JobRequest $jr, JobOrder $jo, User $user)
+    {
+      $jr->update([
+        'status_id'     => 5,
+      ]);
+      return $jr;
+    }
+
+    /**
+     * Set joborder as inProgress status
+     */
+    public static function InProgress(JobRequest $jr, JobOrder $jo, User $user)
+    {
+      $jr->update([
+        'status_id'     => 4,
       ]);
       return $jr;
     }

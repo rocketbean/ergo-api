@@ -1,24 +1,40 @@
 <?php
 
 namespace App\Http\Controllers;
-use Auth;
 use App\Models\JobOrder;
-use App\Models\Supplier;
-use App\Models\Property;
 use App\Models\JobOrderItem;
 use App\Models\JobRequest;
+use App\Models\Property;
+use App\Models\Supplier;
+use App\Notifications\approveJobOrder;
+use App\Notifications\completeJobOrder;
+use App\Notifications\confirmJobOrder;
+use App\Notifications\newQuote;
+use Auth;
 use Illuminate\Http\Request;
 
 class JobOrderController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(JobOrder $jo)
     {
-        //
+        return $jo;
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function joborders(Supplier $supplier)
+    {
+        return $supplier->joborders;
     }
 
     /**
@@ -93,7 +109,7 @@ class JobOrderController extends Controller
                     }
                 }
             }
-
+            $property->owner->notify(new newQuote($jo, $jr, $supplier));
             return $jo->load(['photos', 'files', 'videos','items']);
         }
     }
@@ -178,13 +194,69 @@ class JobOrderController extends Controller
      * @param  \App\Models\JobOrder  $jobOrder
      * @return \Illuminate\Http\Response
      */
-    public function confirm (JobOrder $jo, JobRequest $jr) {
+    public function approve (JobOrder $jo, JobRequest $jr) {
         $user = Auth::user();
         $njo  = JobOrder::Approve($jo, $user);
         $njr  = JobRequest::Approve($jr, $jo, $user);
+        $jo->supplier->user->notify(new approveJobOrder($jo, $jr, $jr->property));
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
         ];
+
+    }
+
+    /**
+     * Set joborder as confirmed status
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm (JobOrder $jo, JobRequest $jr) {
+        $user = Auth::user();
+        $njo  = JobOrder::Confirm($jo, $user);
+        $njr  = JobRequest::Confirm($jr, $jo, $user);
+        $jr->property->owner->notify(new confirmJobOrder($jo, $jr, $jo->supplier));
+        return [
+            'joborder' => $njo,
+            'jobrequest' => $njr
+        ];
+
+    }
+
+    /**
+     * Set joborder as completed status
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function complete (JobOrder $jo, JobRequest $jr) {
+        $user = Auth::user();
+        $njo  = JobOrder::Complete($jo, $user);
+        $njr  = JobRequest::Complete($jr, $jo, $user);
+        $jr->property->owner->notify(new completeJobOrder($jo, $jr, $jo->supplier));
+        return [
+            'joborder' => $njo,
+            'jobrequest' => $njr
+        ];
+
+    }
+
+    /**
+     * rollback's the status to inProgress
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function rollback (JobOrder $jo, JobRequest $jr) {
+        $user = Auth::user();
+        $njo  = JobOrder::InProgress($jo, $user);
+        $njr  = JobRequest::InProgress($jr, $jo, $user);
+        $jr->property->owner->notify(new rollbackJobOrder($jo, $jr, $jo->supplier));
+        return [
+            'joborder' => $njo,
+            'jobrequest' => $njr
+        ];
+
     }
 }

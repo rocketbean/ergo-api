@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Property;
+use App\Models\Supplier;
+use App\Notifications\newQuote;
 use Illuminate\Http\Request;
 
 /*
@@ -19,9 +22,15 @@ Route::post('register','RegistrationController@register');
 Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.configure');
 Route::post('photological', 'CoreController@assignPhotos')->middleware('core.configure');
 Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
-Route::post('intial', 'CoreController@configure')->middleware('core.configure');
+Route::post('initial', 'CoreController@configure')->middleware('core.configure');
 
-  Route::post('alerts/create', 'AlertController@create');
+Route::post('alerts/create', function () {
+  $user = Auth::user();
+  $jr = \App\Models\JobRequest::find(1)->load(['property']);
+  $jo = \App\Models\JobOrder::find(1)->load(['property']);
+  $property = Supplier::findorfail(1);
+  return $user->notify(new newQuote($jr, $jo, $property));
+});
 
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::post('alerts', 'AlertController@index');
@@ -48,6 +57,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   */
   Route::group(['prefix' => 'jobrequests'], function () {
     Route::group(['prefix' => '{jr}'], function () {
+      Route::post('/', 'JobRequestController@index');
       Route::group(['prefix' => 'items/{item}'], function () {
         Route::post('destroy', 'JobRequestItemController@destroy');
         Route::group(['prefix' => 'photos/{photo}'], function () {
@@ -62,9 +72,13 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   */
   Route::group(['prefix' => 'joborders'], function () {
     Route::group(['prefix' => '{jo}'], function () {
+      Route::post('/', 'JobOrderController@index');
       Route::post('viewed', 'JobOrderController@viewed');
       Route::group(['prefix' => 'jobrequests/{jr}'], function () {
+        Route::post('approve', 'JobOrderController@approve');
         Route::post('confirm', 'JobOrderController@confirm');
+        Route::post('rollback', 'JobOrderController@rollback');
+        Route::post('complete', 'JobOrderController@complete');
       });
     });
   });

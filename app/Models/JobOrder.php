@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+// use Nesbot\Carbon;
+use Carbon\Carbon;
 
 class JobOrder extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['photos', 'files', 'videos','items', 'supplier', 'property'];
+    protected $with = ['photos', 'files', 'videos','items', 'supplier', 'property' , 'jobrequest'];
+
+    protected $dates = ['created_at'];
 
     public function user() {
       return $this->belongsTo(User::class);
@@ -24,7 +27,7 @@ class JobOrder extends Model
     }
 
     public function jobrequest() {
-      return $this->belongsTo(JobRequest::class);
+      return $this->belongsTo(JobRequest::class, 'job_request_id');
     }
 
     public function property() {
@@ -89,13 +92,48 @@ class JobOrder extends Model
     }
 
     /**
-     * Get all of the [users] for the [property].
+     * Set joborder as Approve status
      */
     public static function Approve(JobOrder $jo, User $user)
     {
       $jo->update([
         'status_id' => 3,
         'approved_by' => $user->id,
+      ]);
+      return $jo;
+    }
+
+
+    /**
+     * Set joborder as Confirm status
+     */
+    public static function Confirm(JobOrder $jo, User $user)
+    {
+      $jo->update([
+        'status_id' => 4,
+      ]);
+      return $jo;
+    }
+
+
+    /**
+     * Set joborder as Completed status
+     */
+    public static function Complete(JobOrder $jo, User $user)
+    {
+      $jo->update([
+        'status_id' => 5,
+      ]);
+      return $jo;
+    }
+
+    /**
+     * Set joborder as inProgress status
+     */
+    public static function InProgress(JobOrder $jo, User $user)
+    {
+      $jo->update([
+        'status_id' => 4,
       ]);
       return $jo;
     }

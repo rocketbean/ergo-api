@@ -97,10 +97,10 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get all of the [notifications] for the [user].
      */
-    public function alerts()
-    {
-        return $this->hasMany(Alert::class);
-    }
+    // public function notifications()
+    // {
+        // return $this->hasMany(Notification::class);
+    // }
 
 
     public function newPivot(Model $parent, array $attributes, $table, $exists,  $using = null)

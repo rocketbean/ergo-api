@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Location;
 use App\Models\JobRequest;
-use App\Models\Tag;
+use App\Models\Location;
 use App\Models\Photo;
+use App\Models\Tag;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model
 {
@@ -14,7 +15,7 @@ class Property extends Model
     protected $with = ['primary', 'photos', 'files', 'videos'];
 
      public function owner () {
-      return $this->belongsTo(User::class);
+      return $this->belongsTo(User::class, 'user_id');
      }
 
      public function location () {

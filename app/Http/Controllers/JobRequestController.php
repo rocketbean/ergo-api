@@ -13,9 +13,9 @@ class JobRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Property $property, JobRequest $jr, Request $request)
+    public function index(JobRequest $jr)
     {
-        return $jr->load('items');
+        return $jr->load(['items', 'joborder']);
     }
 
     /**
