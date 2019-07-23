@@ -3,13 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+// use Nesbot\Carbon;
+use Carbon\Carbon;
 
 class JobOrder extends Model
 {
     protected $guarded = [];
 
     protected $with = ['photos', 'files', 'videos','items', 'supplier', 'property' , 'jobrequest'];
+
+    protected $dates = ['created_at'];
 
     public function user() {
       return $this->belongsTo(User::class);

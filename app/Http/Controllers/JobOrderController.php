@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 
 class JobOrderController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
