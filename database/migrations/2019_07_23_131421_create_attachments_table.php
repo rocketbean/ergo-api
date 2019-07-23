@@ -15,7 +15,17 @@ class CreateAttachmentsTable extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id');
+            $table->text('description');
             $table->timestamps();
+        });
+
+        Schema::create('attachables', function (Blueprint $table) {
+            $table->bigInteger('attachment_id')->index();
+            $table->bigInteger('attachable_id')->index();
+            $table->string('attachable_type');
+            $table->timestamps();
+            $table->unique(['attachment_id', 'attachable_id', 'attachable_type']);
         });
     }
 
@@ -26,6 +36,7 @@ class CreateAttachmentsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('attachments');
         Schema::dropIfExists('attachments');
     }
 }
