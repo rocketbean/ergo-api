@@ -20,11 +20,11 @@ class JobOrderItem extends Model
     }
 
     public function joborder () {
-      return $this->belongsTo(JobOrder::class);
+      return $this->belongsTo(JobOrder::class, 'job_request_id');
     }
 
     public function jobrequest () {
-      return $this->belongsTo(JobRequest::class);
+      return $this->belongsTo(JobRequest::class, 'job_request_id');
     }
 
     public function jobrequestitem () {
@@ -84,6 +84,14 @@ class JobOrderItem extends Model
       return $value;
     }
 
+
+    /**
+     * Get all of the photos for the jobrequest.
+     */
+    public function attachments()
+    {
+        return $this->morphToMany(Attachment::class, 'attachable');
+    }
 
     /**
      * Get all of the [users] for the [property].

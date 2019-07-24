@@ -35,6 +35,14 @@ class JobRequestItem extends Model
         return $item->photos()->attach($photo->id);
     }
 
+    /**
+     * Get all of the photos for the jobrequest.
+     */
+    public function attachments()
+    {
+        return $this->morphToMany(Attachment::class, 'attachable');
+    }
+
 
     /**
      * Get all of the photos for the jobrequest.
@@ -74,6 +82,5 @@ class JobRequestItem extends Model
         if(!$item->{$relation}->contains($model['id'])) {
             $item->{$relation}()->attach($model['id']);
         }
-
     }
 }

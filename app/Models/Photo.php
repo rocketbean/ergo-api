@@ -3,11 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Property;
-use App\Models\Supplier;
-use App\Models\JobRequest;
-use App\Models\JobOrder;
+
 
 class Photo extends Model
 {
@@ -31,5 +27,9 @@ class Photo extends Model
 
     public function joborders () {
       return $this->morphedByMany(JobOrder::class, 'photoable');
+    }
+
+    public function attachments () {
+      return $this->morphedByMany(Attachment::class, 'photoable');
     }
 }

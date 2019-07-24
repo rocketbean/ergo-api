@@ -3,12 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Property;
-use App\Models\User;
-use App\Models\JobRequestItem;
-use App\Models\Tag;
-use App\Models\Photo;
-use App\Models\Video;
+
 
 class JobRequest extends Model
 {

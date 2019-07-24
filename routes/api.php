@@ -53,6 +53,14 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   });
 
   /*
+    Attachment
+  */
+  Route::group(['prefix' => 'attachments'], function () {
+    Route::get('/', 'AttachmentController@index');
+    Route::post('store', 'AttachmentController@store');
+  });
+
+  /*
     jobrequests
   */
   Route::group(['prefix' => 'jobrequests'], function () {
