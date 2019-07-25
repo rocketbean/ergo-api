@@ -5,6 +5,8 @@ use Auth;
 use App\Models\Location;
 use App\Models\Property;
 use App\Models\Supplier;
+use App\Models\JobRequest;
+
 use Illuminate\Http\Request;
 
 class LocationController extends Controller
@@ -130,5 +132,19 @@ class LocationController extends Controller
     public function destroy(Location $location)
     {
         //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Location  $location
+     * @return \Illuminate\Http\Response
+     */
+    public function JobRequestDirection(JobRequest $jr)
+    {
+        return [
+            'supplier' => $jr->joborder->supplier->location,
+            'property' => $jr->property->location,
+        ];
     }
 }

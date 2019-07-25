@@ -39,6 +39,11 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('countries', 'CoreController@countries');
     Route::get('tags', 'CoreController@tags');
   });
+
+  Route::group(['prefix' => 'directions'], function () {
+    Route::get('jobrequest/{jr}', 'LocationController@JobRequestDirection');
+  });
+
   /*
     Photos
   */
