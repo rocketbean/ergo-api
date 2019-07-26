@@ -115,4 +115,15 @@ class PropertyController extends Controller
         $property->update(['primary' => $photo->id]);
         return Property::find($property->id);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function photos(Property $property)
+    {
+        return $property->photos;
+    }
 }
