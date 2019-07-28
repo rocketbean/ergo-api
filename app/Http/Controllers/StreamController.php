@@ -16,9 +16,12 @@ class StreamController extends Controller
      */
     public function index(Supplier $supplier)
     {
-        return JobRequest::whereDoesntHave('joborders', function($query) use ($supplier) {
-          $query->whereIn('supplier_id', [ $supplier->id]);
-        })->get()->load('property');
+        return JobRequest::where('status_id', 2)
+            ->whereDoesntHave('joborders', function($query) use ($supplier) {
+              $query->whereIn('supplier_id', [ $supplier->id]);
+            })
+            ->get()
+            ->load('property');
         
     }
 

@@ -46,8 +46,10 @@ class JobRequestItemController extends Controller
             'user_id'           => Auth::user()->id,
             'name'              => $request->name,
             'job_request_id'    => $jr->id,
-            'description'       => $request->description
+            'description'       => $request->description,
+            'uploaderData'      => $request->uploaderData,
         ]);
+        
         if(!empty($request->photos)) {
             foreach ($request->photos as $photo) {
                 Property::RelateTo($property, $photo, 'photos');

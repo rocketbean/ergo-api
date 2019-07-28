@@ -22,6 +22,7 @@ class CreateJobRequestsTable extends Migration
             $table->bigInteger('job_order_id')->index()->nullable();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->text('uploaderData')->nullable();
             $table->timestamps();
         });
     }

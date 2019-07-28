@@ -40,6 +40,7 @@ class JobRequestController extends Controller
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
             'description' => $request->description,
+            'status_id'   => 1
         ]);
     }
 
