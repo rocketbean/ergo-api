@@ -8,6 +8,7 @@ use App\Models\Supplier;
 use App\Models\Property;
 use App\Models\Photo;
 use App\Models\Tag;
+use App\Models\Role;
 use App\Models\Alert;
 use App\Services\ErgoService;
 use App\Services\SupplierNotification;
@@ -88,6 +89,24 @@ class CoreController extends Controller
             ]);
         }
         return Tag::all();
+    }
+
+    /**
+     * Creates The general roles for users[options]
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function assignRoles() {
+        $roles = (new Role)->open_roles();
+        foreach ($roles as $role) {
+            Role::create([
+                'name'          => $role['name'],
+                'type'          => $role['type'],
+                'description'   => $role['description']
+            ]);
+        }
+        return Role::all();
     }
 
     /**

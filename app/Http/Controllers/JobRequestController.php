@@ -90,7 +90,7 @@ class JobRequestController extends Controller
         if(count($jr->items) < 1 ){
             return response()->json('job requests that has no items cannot be published', 406);
         } else {
-            $jr->update(['status_id' => 1]);
+            $jr->update(['status_id' => 2]);
             return $jr;
         }
     }

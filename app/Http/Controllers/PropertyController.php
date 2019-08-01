@@ -126,4 +126,15 @@ class PropertyController extends Controller
     {
         return $property->photos;
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function users(Property $property)
+    {
+        return $property->users;
+    }
 }

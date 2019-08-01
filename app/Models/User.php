@@ -94,6 +94,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Supplier::class)->withPivot('client_id');
     }
 
+
+    /**
+     * Get all of the [photos] for the [property].
+     */
+    public function primary()
+    {
+        return $this->belongsTo(Photo::class, 'primary');
+    }
+
+    
     /**
      * Get all of the [notifications] for the [user].
      */

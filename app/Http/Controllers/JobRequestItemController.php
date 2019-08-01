@@ -47,7 +47,7 @@ class JobRequestItemController extends Controller
             'name'              => $request->name,
             'job_request_id'    => $jr->id,
             'description'       => $request->description,
-            'uploaderData'      => $request->uploaderData,
+            'uploaderData'      => json_encode($request->uploaderData),
         ]);
         
         if(!empty($request->photos)) {
