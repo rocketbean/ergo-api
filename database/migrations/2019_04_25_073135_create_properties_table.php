@@ -28,6 +28,7 @@ class CreatePropertiesTable extends Migration
             $table->bigInteger('user_id')->index();
             $table->bigInteger('property_id')->index();
             $table->bigInteger('role_id')->default(2)->index();
+            $table->bigInteger('status')->default(1)->index();
             $table->timestamps();
         });
     }

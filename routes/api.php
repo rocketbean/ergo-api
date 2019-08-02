@@ -35,6 +35,7 @@ Route::post('alerts/create', function () {
 
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::post('alerts', 'AlertController@index');
+  Route::post('roles', 'RoleController@index');
   
   Route::group(['prefix' => 'ergo'], function () {
     Route::get('countries', 'CoreController@countries');
@@ -104,6 +105,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'PropertyController@index');
     Route::post('store', 'PropertyController@store');
     Route::group(['prefix' => '{property}'], function () {
+
+      Route::post('users/invite', 'PropertyController@invite');
       Route::get('photos', 'PropertyController@photos');
       Route::get('users', 'PropertyController@users');
       Route::post('show', 'PropertyController@show');

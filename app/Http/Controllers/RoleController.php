@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use Illuminate\Http\Request;
-
+use App\Http\Resources\RoleResource;
 class RoleController extends Controller
 {
     /**
@@ -14,7 +14,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return RoleResource::collection(Role::get());
     }
 
     /**

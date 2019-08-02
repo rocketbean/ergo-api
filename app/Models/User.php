@@ -103,6 +103,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Photo::class, 'primary');
     }
 
+
     
     /**
      * Get all of the [notifications] for the [user].

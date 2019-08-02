@@ -78,18 +78,24 @@ class Property extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class)
-            ->using(PropertyUser::class)
-            ->accessor("role");
+        return $this->belongsToMany(User::class);
+            // ->using(PropertyUser::class)
+            // ->accessor("role");
     }
 
     /**
      * Get all of the [users] for the [property].
      */
-    public function role()
+    public function propertyUsers()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsToMany(User::class)
+            ->using(PropertyUser::class)
+            ->withPivot('role_id')
+            ->as('propertyUsers');
     }
+
+
+
     
 
 

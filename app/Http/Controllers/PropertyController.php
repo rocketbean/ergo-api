@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\Property;
 use App\Models\Photo;
+use App\Models\User;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class PropertyController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return $user->properties->load(['users']);
+        return $user->properties;
     }
 
     /**
@@ -44,7 +45,7 @@ class PropertyController extends Controller
             'description' => $request->description,
             'primary'     => 1
         ]);
-        $property->users()->attach(Auth::user()->id, ['role_id' => 1]);
+        $property->users()->attach(Auth::user()->id, ['role_id' => 1, 'status' => 1]);
         return $property;
     }
 
@@ -135,6 +136,27 @@ class PropertyController extends Controller
      */
     public function users(Property $property)
     {
-        return $property->users;
+        foreach ($property->propertyUsers as $user) {
+            $user->propertyUsers->load(['role']);
+        };
+        return $property->propertyUsers;
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function invite(Property $property, Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if($user) {
+            $property->users()->attach($user->id, ['role_id' => $request->role, 'status' => 2 ]);
+            return $property->propertyUsers;
+        } else {
+            return response()->json('user not found', 400);
+        }
     }
 }
