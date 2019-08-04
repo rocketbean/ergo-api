@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class PropertyUser extends Pivot 
 {
-    protected $table = "property_user";
-    // protected $guarded = [];
-	protected $with = ['role'];
-
-	public function role () {
-		return $this->belongsTo(Role::class);
-	}
+  protected $table = "property_user";
+  protected $guarded = [];
+	protected $with = ['role', 'permission'];
+  
+  public function role () {
+    return $this->belongsTo(Role::class);
+  }
+  
+  public function permission () {
+    return $this->belongsToMany(Permission::class);
+  }
 }

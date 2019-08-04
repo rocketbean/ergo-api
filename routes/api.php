@@ -23,6 +23,7 @@ Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.con
 Route::post('photological', 'CoreController@assignPhotos')->middleware('core.configure');
 Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
 Route::post('assignRoles', 'CoreController@assignRoles')->middleware('core.configure');
+Route::post('assignPermissions', 'CoreController@assignPermissions')->middleware('core.configure');
 Route::post('initial', 'CoreController@configure')->middleware('core.configure');
 
 Route::post('alerts/create', function () {
@@ -105,7 +106,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'PropertyController@index');
     Route::post('store', 'PropertyController@store');
     Route::group(['prefix' => '{property}'], function () {
-
+      Route::get('permissions/get', 'PropertyController@permissions');
       Route::post('users/invite', 'PropertyController@invite');
       Route::get('photos', 'PropertyController@photos');
       Route::get('users', 'PropertyController@users');

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\JobRequest;
 use App\Models\Supplier;
 use App\Models\Property;
+use App\Models\Permission;
 use App\Models\Photo;
 use App\Models\Tag;
 use App\Models\Role;
@@ -34,6 +35,7 @@ class CoreController extends Controller
         $this->assignPhotos();
         $this->assignTags();
         $this->assignRoles();
+        $this->assignPermissions();
     }
 
     /**
@@ -105,6 +107,26 @@ class CoreController extends Controller
                 'name'          => $role['name'],
                 'type'          => $role['type'],
                 'description'   => $role['description']
+            ]);
+        }
+        return Role::all();
+    }
+
+    /**
+     * Creates The general roles for users[options]
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function assignPermissions() {
+        $permissions = (new Permission)->open_permissions();
+        foreach ($permissions as $permission) {
+            Permission::create([
+                'name'            => $permission['name'],
+                'description'     => $permission['description'],
+                'type'            => $permission['type'],
+                'group'            => $permission['group'],
+                'permission_type' => $permission['permission_type'],
             ]);
         }
         return Role::all();

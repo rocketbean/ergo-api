@@ -5,6 +5,7 @@ use Auth;
 use App\Models\Property;
 use App\Models\Photo;
 use App\Models\User;
+use App\Models\Permission;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -141,6 +142,16 @@ class PropertyController extends Controller
         };
         return $property->propertyUsers;
 
+    }
+
+    /**
+     * returns [Permission::class] property
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function permissions()
+    {
+        return Permission::where('group', Property::class)->get();
     }
 
     /**

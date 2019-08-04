@@ -79,8 +79,6 @@ class Property extends Model
     public function users()
     {
         return $this->belongsToMany(User::class);
-            // ->using(PropertyUser::class)
-            // ->accessor("role");
     }
 
     /**
@@ -90,14 +88,9 @@ class Property extends Model
     {
         return $this->belongsToMany(User::class)
             ->using(PropertyUser::class)
-            ->withPivot('role_id')
+            ->withPivot(['role_id', 'status'])
             ->as('propertyUsers');
     }
-
-
-
-    
-
 
     /**
      * Get all of the [users] for the [property].
