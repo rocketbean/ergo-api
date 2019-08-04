@@ -65,10 +65,19 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    /**
+     * Get all of the [users] for the [property].
+     */
     public function properties()
     {
-        return $this->hasMany(Property::class);
+        return $this->belongsToMany(Property::class);
+            // ->using(PropertyUser::class)
+            // ->accessor("role");
     }
+    // public function properties()
+    // {
+    //     return $this->hasMany(Property::class);
+    // }
     
     /**
      * Get all of the [photos] for the [user].
