@@ -19,6 +19,7 @@ class CreatePermissionsTable extends Migration
             $table->string('group');
             $table->string('type');
             $table->string('name');
+            $table->string('slug');
             $table->text('description');
             $table->timestamps();
         });
@@ -28,6 +29,15 @@ class CreatePermissionsTable extends Migration
             $table->bigInteger('property_user_id');
             $table->bigInteger('permission_id');
             $table->timestamps();
+            $table->unique(['property_user_id', 'permission_id']);
+        });
+
+        Schema::create('permission_role', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('role_id');
+            $table->bigInteger('permission_id');
+            $table->timestamps();
+            $table->unique(['role_id', 'permission_id']);
         });
         
     }
@@ -40,6 +50,7 @@ class CreatePermissionsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('permissions');
+        Schema::dropIfExists('permission_role');
         Schema::dropIfExists('permission_property_user');
     }
 }

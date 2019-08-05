@@ -34,8 +34,8 @@ class CoreController extends Controller
         $this->createFirstUser();
         $this->assignPhotos();
         $this->assignTags();
-        $this->assignRoles();
         $this->assignPermissions();
+        $this->assignRoles();
     }
 
     /**
