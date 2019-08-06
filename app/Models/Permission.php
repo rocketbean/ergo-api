@@ -108,14 +108,6 @@ class Permission extends Model
               'group'           => Property::class
           ],
           [
-              'name'            => 'Update',
-              'slug'            => 'update_joborder',
-              'description'     => 'Permission to Update',
-              'type'            => JobOrder::class,
-              'permission_type' => PropertyUser::class,
-              'group'           => Property::class
-          ],
-          [
               'name'            => 'Delete',
               'slug'            => 'delete_joborder',
               'description'     => 'Permission to Delete',
@@ -141,5 +133,9 @@ class Permission extends Model
               'group'           => Property::class
           ],
     ];
+  }
+
+  public static function slug ($slug) {
+    return Permission::where('slug', $slug)->first();
   }
 }

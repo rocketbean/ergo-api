@@ -64,6 +64,16 @@ class JobRequest extends Model
     }
 
     /**
+     * check if the bridge is authorized
+     */
+    public function scopeAuthorized()
+    {
+        // $bridge = (new PropertyUser)->userBridge($this);
+        var_dump($this); exit;
+        // return $bridge->role->permissions->contains(Permission::slug($rule));
+    }
+
+    /**
      * Get all of the photos for the jobrequest.
      */
     public function attachPhoto(JobRequest $jr, Photo $photo)

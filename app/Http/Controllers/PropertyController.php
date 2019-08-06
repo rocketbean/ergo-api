@@ -7,6 +7,7 @@ use App\Models\Photo;
 use App\Models\User;
 use App\Models\Permission;
 use App\Models\Tag;
+use App\Http\Resources\PropertyResource;
 use Illuminate\Http\Request;
 
 class PropertyController extends Controller
@@ -57,8 +58,9 @@ class PropertyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Property $property)
-    {
-        return $property->load(['jobrequests', 'jobrequests.joborders','photos', 'location', 'videos','users']);
+    {  
+        // return $property->load(['photos', 'location', 'videos','users', 'jobrequests.joborders']);
+        return new PropertyResource($property->load(['photos', 'location', 'videos','users', 'jobrequests.joborders']));
     }
 
     /**
@@ -137,10 +139,13 @@ class PropertyController extends Controller
      */
     public function users(Property $property)
     {
-        foreach ($property->propertyUsers as $user) {
-            $user->propertyUsers->load(['role']);
-        };
-        return $property->propertyUsers;
+        if($property->authorized('read_user')) {
+            foreach ($property->propertyUsers as $user) {
+                $user->propertyUsers->load(['role']);
+            };
+            return $property->propertyUsers;
+        }
+        return [];
 
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Auth;
 use App\Models\JobRequest;
 use App\Models\Location;
 use App\Models\Photo;
@@ -22,8 +23,16 @@ class Property extends Model
       return $this->belongsTo(Location::class);
      }
 
-     public function Jobrequests () {
-      return $this->hasMany(JobRequest::class);
+     public function jobrequests () {
+            return $this->hasMany(JobRequest::class);
+     }
+
+     public function authorizeJobRequest () {
+        if($this->authorized('show_jobrequests')) {
+            return $this->hasMany(JobRequest::class);
+        } else {
+            return $this->hasMany(JobRequest::class)->where('user_id', Auth::user()->id);
+        }
      }
 
     /**
@@ -53,6 +62,14 @@ class Property extends Model
      * Get all of the [photos] for the [property].
      */
     public function primary()
+    {
+        return $this->belongsTo(Photo::class, 'primary');
+    }
+
+    /**
+     * Get all of the [photos] for the [property].
+     */
+    public function primaryPhoto()
     {
         return $this->belongsTo(Photo::class, 'primary');
     }
@@ -100,5 +117,22 @@ class Property extends Model
         if(!$property->{$relation}->contains($model['id']))
             $property->{$relation}()->attach($model['id']);
 
+    }
+
+    /**
+     * check if the bridge is authorized
+     */
+    public function authorized($rule)
+    {
+        $bridge = (new PropertyUser)->userBridge($this);
+        return $bridge->role->permissions->contains(Permission::slug($rule));
+    }
+
+    /**
+     * check if the bridge is authorized
+     */
+    public function role()
+    {
+        return (new PropertyUser)->userBridge($this);
     }
 }

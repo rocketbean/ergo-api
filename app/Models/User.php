@@ -74,6 +74,17 @@ class User extends Authenticatable implements JWTSubject
             // ->using(PropertyUser::class)
             // ->accessor("role");
     }
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public function propertyUsers()
+    {
+        return $this->belongsToMany(Property::class)
+            ->using(PropertyUser::class)
+            ->withPivot(['role_id', 'status'])
+            ->as('propertyUsers');
+    }
     // public function properties()
     // {
     //     return $this->hasMany(Property::class);
