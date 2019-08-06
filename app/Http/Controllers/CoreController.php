@@ -103,13 +103,40 @@ class CoreController extends Controller
     public function assignRoles() {
         $roles = (new Role)->open_roles();
         foreach ($roles as $role) {
-            Role::create([
+            $r = Role::create([
                 'name'          => $role['name'],
                 'type'          => $role['type'],
                 'description'   => $role['description']
             ]);
+            $this->attachPermissions($role['permissions'], $r);
         }
         return Role::all();
+    }
+
+    /**
+     * Creates The general roles for users[options]
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function attachPermissions($permissions, Role $role) {
+        if($permissions === '*') {
+            $permissions = Permission::get();
+            foreach ($permissions as $p) {
+                if(!$role->permissions->contains($p->id))
+                    $role->permissions()->attach($p->id);
+            }
+        } else {
+            foreach ($permissions as $permission) {
+                $p = Permission::where('slug',$permission)->first();
+                if($p) {
+                    if(!$role->permissions->contains($p->id))
+                        $role->permissions()->attach($p->id);
+                }
+            }            
+        }
+
+
     }
 
     /**
@@ -125,7 +152,8 @@ class CoreController extends Controller
                 'name'            => $permission['name'],
                 'description'     => $permission['description'],
                 'type'            => $permission['type'],
-                'group'            => $permission['group'],
+                'group'           => $permission['group'],
+                'slug'            => $permission['slug'],
                 'permission_type' => $permission['permission_type'],
             ]);
         }

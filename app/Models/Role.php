@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+    protected $with = ['permissions'];
+
     protected $guarded = [];
 
     public function open_roles () {
@@ -19,7 +21,7 @@ class Role extends Model
             [
                 'name'        => 'Admin',
                 'description' => 'Property Administrator',
-                'type'        => '*'
+                'type'        => '*',
                 'permissions' => [
                     'approve_jobrequest', 'create_jobrequest', 'read_jobrequest', 'update_jobrequest', 'delete_jobrequest',
                     'approve_joborder', 'read_joborder', 'delete_joborder',
@@ -33,7 +35,7 @@ class Role extends Model
                 'type'        => Property::class,
                 'permissions' => [
                     'create_jobrequest', 'read_jobrequest',
-                    'approve_joborder', 'create_joborder', 'read_joborder', 'update_joborder', 'delete_joborder',
+                    'approve_joborder', 'read_joborder', 'delete_joborder',
 
                 ]
             ],
@@ -43,13 +45,13 @@ class Role extends Model
                 'type'        => Property::class,
                 'permissions' => [
                     'create_jobrequest', 'read_jobrequest',
-                    'approve_joborder', 'create_joborder', 'read_joborder', 'update_joborder', 'delete_joborder',
+                    'approve_joborder', 'read_joborder', 'delete_joborder',
                 ]
             ],
     	];
     }
 
     public function permissions () {
-        return $this->hasMany(Permission::class);
+        return $this->belongsToMany(Permission::class);
     }
 }
