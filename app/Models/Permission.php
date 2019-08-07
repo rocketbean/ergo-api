@@ -43,9 +43,9 @@ class Permission extends Model
               'group'           => Property::class
           ],
           [
-              'name'            => 'Create',
-              'slug'            => 'create_user',
-              'description'     => 'Permission to Create',
+              'name'            => 'Invite',
+              'slug'            => 'invite_user',
+              'description'     => 'Permission to invite',
               'type'            => User::class,
               'permission_type' => PropertyUser::class,
               'group'           => Property::class

@@ -108,9 +108,9 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('store', 'PropertyController@store');
     Route::group(['prefix' => '{property}'], function () {
       Route::get('permissions/get', 'PropertyController@permissions');
-      Route::post('users/invite', 'PropertyController@invite');
+      Route::post('users/invite', 'PropertyController@invite')->middleware('PropertyUser.invite');
       Route::get('photos', 'PropertyController@photos');
-      Route::get('users', 'PropertyController@users');
+      Route::get('users', 'PropertyController@users')->middleware('PropertyUser.view');
       Route::post('show', 'PropertyController@show');
       Route::post('update/primary/{photo}', 'PropertyController@primary');
       Route::group(['prefix' => 'tag'], function () {

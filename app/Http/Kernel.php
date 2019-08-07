@@ -79,6 +79,8 @@ class Kernel extends HttpKernel
         'service' => \App\Http\Middleware\service::class,
         'PropertyJobRequest.publish' => \App\Http\Middleware\Property\JobRequest\Publish::class,
         'PropertyJobRequest.delete' => \App\Http\Middleware\Property\JobRequest\Delete::class,
+        'PropertyUser.view' => \App\Http\Middleware\Property\User\View::class,
+        'PropertyUser.invite' => \App\Http\Middleware\Property\User\Invite::class,
     ];
 
     /**
