@@ -77,6 +77,8 @@ class Kernel extends HttpKernel
         'jwt.refresh' => \Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
         'core.configure' => \App\Http\Middleware\core\configurable::class,
         'service' => \App\Http\Middleware\service::class,
+        'PropertyJobRequest.publish' => \App\Http\Middleware\Property\JobRequest\Publish::class,
+        'PropertyJobRequest.delete' => \App\Http\Middleware\Property\JobRequest\Delete::class,
     ];
 
     /**

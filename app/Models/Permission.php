@@ -10,25 +10,9 @@ class Permission extends Model
   public function open_permissions () {
     return [
           [
-              'name'            => 'Approve',
-              'slug'            => 'approve_jobrequest',
-              'description'     => 'Permission to approve',
-              'type'            => JobRequest::class,
-              'permission_type' => PropertyUser::class,
-              'group'           => Property::class
-          ],
-          [
-              'name'            => 'Create',
-              'slug'            => 'create_jobrequest',
-              'description'     => 'Permission to Create',
-              'type'            => JobRequest::class,
-              'permission_type' => PropertyUser::class,
-              'group'           => Property::class
-          ],
-          [
-              'name'            => 'Read Only',
-              'slug'            => 'read_jobrequest',
-              'description'     => 'Permission to view',
+              'name'            => 'Publish',
+              'slug'            => 'publish_jobrequest',
+              'description'     => 'Permission to publish own jobrequest',
               'type'            => JobRequest::class,
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
@@ -36,7 +20,7 @@ class Permission extends Model
           [
               'name'            => 'Update',
               'slug'            => 'update_jobrequest',
-              'description'     => 'Permission to Update',
+              'description'     => 'Permission to Update own jobrequest',
               'type'            => JobRequest::class,
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
@@ -124,6 +108,16 @@ class Permission extends Model
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
           ],
+
+          [
+              'name'            => 'Show',
+              'slug'            => 'update_jobrequests',
+              'description'     => 'permission to update all jobrequests',
+              'type'            => Property::class,
+              'permission_type' => PropertyUser::class,
+              'group'           => Property::class
+          ],
+
           [
               'name'            => 'Update',
               'slug'            => 'update_settings',

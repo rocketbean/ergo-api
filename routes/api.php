@@ -40,6 +40,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   
   Route::group(['prefix' => 'ergo'], function () {
     Route::get('countries', 'CoreController@countries');
+    Route::get('permissions', 'PermissionController@index');
     Route::get('tags', 'CoreController@tags');
   });
 
@@ -119,8 +120,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
         Route::post('store', 'JobRequestController@store');
         Route::group(['prefix' => '{jr}'], function () {
           Route::post('/', 'JobRequestController@index');
-          Route::post('/destroy', 'JobRequestController@destroy');
-          Route::post('publish', 'JobRequestController@publish');
+          Route::post('/destroy', 'JobRequestController@destroy')->middleware('PropertyJobRequest.delete');
+          Route::post('publish', 'JobRequestController@publish')->middleware('PropertyJobRequest.publish');
           Route::post('items/store', 'JobRequestItemController@store');
         });
       });

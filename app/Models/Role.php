@@ -23,10 +23,10 @@ class Role extends Model
                 'description' => 'Property Administrator',
                 'type'        => '*',
                 'permissions' => [
-                    'approve_jobrequest', 'create_jobrequest', 'read_jobrequest', 'update_jobrequest', 'delete_jobrequest',
+                    'publish_jobrequest', 'update_jobrequest', 'delete_jobrequest',
                     'approve_joborder', 'read_joborder', 'delete_joborder',
                     'approve_user', 'create_user', 'read_user', 'update_user', 'delete_user',
-                    'show_jobrequests'
+                    'show_jobrequests', 'update_jobrequests'
                 ]
             ],
             [
@@ -34,9 +34,7 @@ class Role extends Model
                 'description' => 'Property Tenant',
                 'type'        => Property::class,
                 'permissions' => [
-                    'create_jobrequest', 'read_jobrequest',
-                    'approve_joborder', 'read_joborder', 'delete_joborder',
-
+                    'read_joborder', 'delete_joborder',
                 ]
             ],
             [
