@@ -110,7 +110,7 @@ class Permission extends Model
           ],
 
           [
-              'name'            => 'Show',
+              'name'            => 'Update',
               'slug'            => 'update_jobrequests',
               'description'     => 'permission to update all jobrequests',
               'type'            => Property::class,
@@ -122,6 +122,15 @@ class Permission extends Model
               'name'            => 'Update',
               'slug'            => 'update_settings',
               'description'     => 'allow update property settings',
+              'type'            => Property::class,
+              'permission_type' => PropertyUser::class,
+              'group'           => Property::class
+          ],
+
+          [
+              'name'            => 'Notify',
+              'slug'            => 'receive_notifications',
+              'description'     => 'receive notifications from all jobrequests',
               'type'            => Property::class,
               'permission_type' => PropertyUser::class,
               'group'           => Property::class

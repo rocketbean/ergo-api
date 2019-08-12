@@ -109,7 +109,7 @@ class JobOrderController extends Controller
                     }
                 }
             }
-            $property->owner->notify(new newQuote($jo, $jr, $supplier));
+            $property->push_notification(new newQuote($jo, $jr, $supplier));
             return $jo->load(['photos', 'files', 'videos','items']);
         }
     }
@@ -216,7 +216,7 @@ class JobOrderController extends Controller
         $user = Auth::user();
         $njo  = JobOrder::Confirm($jo, $user);
         $njr  = JobRequest::Confirm($jr, $jo, $user);
-        $jr->property->owner->notify(new confirmJobOrder($jo, $jr, $jo->supplier));
+        $jr->property->push_notification(new confirmJobOrder($jo, $jr, $jo->supplier));
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
@@ -234,7 +234,7 @@ class JobOrderController extends Controller
         $user = Auth::user();
         $njo  = JobOrder::Complete($jo, $user);
         $njr  = JobRequest::Complete($jr, $jo, $user);
-        $jr->property->owner->notify(new completeJobOrder($jo, $jr, $jo->supplier));
+        $jr->property->push_notification(new completeJobOrder($jo, $jr, $jo->supplier));
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
@@ -252,7 +252,7 @@ class JobOrderController extends Controller
         $user = Auth::user();
         $njo  = JobOrder::InProgress($jo, $user);
         $njr  = JobRequest::InProgress($jr, $jo, $user);
-        $jr->property->owner->notify(new rollbackJobOrder($jo, $jr, $jo->supplier));
+        $jr->property->push_notification(new rollbackJobOrder($jo, $jr, $jo->supplier));
         return [
             'joborder' => $njo,
             'jobrequest' => $njr

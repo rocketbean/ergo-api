@@ -5,6 +5,8 @@ use Auth;
 use App\Models\JobRequest;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use App\Notifications\NewJobRequest;
+use App\Notifications\PublishJobRequest;
 
 class JobRequestController extends Controller
 {
@@ -36,12 +38,15 @@ class JobRequestController extends Controller
      */
     public function store(Property $property, Request $request)
     {
-        return $property->jobrequests()->create([
+
+        $jr = $property->jobrequests()->create([
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
             'description' => $request->description,
             'status_id'   => $property->authorized('publish_jobrequest') ? 1 : 0
         ]);
+        $property->push_notification(new NewJobRequest(Auth::user(), $jr));
+        return $jr;
     }
 
     /**
@@ -90,6 +95,7 @@ class JobRequestController extends Controller
         if(count($jr->items) < 1 ){
             return response()->json('job requests that has no items cannot be published', 406);
         } else {
+            $property->push_notification(new PublishJobRequest(Auth::user(), $jr));
             $jr->update(['status_id' => 2]);
             return $jr;
         }

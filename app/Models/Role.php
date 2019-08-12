@@ -26,7 +26,7 @@ class Role extends Model
                     'publish_jobrequest', 'update_jobrequest', 'delete_jobrequest',
                     'approve_joborder', 'read_joborder', 'delete_joborder',
                     'approve_user', 'create_user', 'read_user', 'update_user', 'delete_user',
-                    'show_jobrequests', 'update_jobrequests'
+                    'show_jobrequests', 'update_jobrequests', 'receive_notifications'
                 ]
             ],
             [

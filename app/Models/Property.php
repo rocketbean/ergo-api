@@ -122,9 +122,13 @@ class Property extends Model
     /**
      * check if the bridge is authorized
      */
-    public function authorized($rule)
+    public function authorized($rule, $user = false)
     {
-        $bridge = (new PropertyUser)->userBridge($this);
+        if(!$user) {
+            $bridge = (new PropertyUser)->userBridge($this);
+        } else {
+            $bridge = (new PropertyUser)->bridge($user, $this);
+        }
         return $bridge->role->permissions->contains(Permission::slug($rule));
     }
 
@@ -134,5 +138,21 @@ class Property extends Model
     public function role()
     {
         return (new PropertyUser)->userBridge($this);
+    }
+
+    /**
+     * check if the bridge is authorized
+     */
+    public function push_notification($notification = '')
+    {
+        $users = [];
+        foreach ($this->propertyUsers as $user) {
+           $user->propertyUsers->load(['role']);
+           if($this->authorized('receive_notifications', $user)) {
+                if($user->id != Auth::user()->id) {
+                    $user->notify($notification);
+                }
+           }
+        }
     }
 }
