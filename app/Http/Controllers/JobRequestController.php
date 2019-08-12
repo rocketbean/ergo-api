@@ -40,7 +40,7 @@ class JobRequestController extends Controller
             'user_id'     => Auth::user()->id,
             'name'        => $request->name,
             'description' => $request->description,
-            'status_id'   => 1
+            'status_id'   => $property->authorized('publish_jobrequest') ? 1 : 0
         ]);
     }
 
