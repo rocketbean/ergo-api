@@ -140,9 +140,13 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('store', 'SupplierController@store');
     Route::group(['prefix' => '{supplier}'], function () {
       Route::post('update/primary/{photo}', 'SupplierController@primary');
+      Route::get('photos', 'SupplierController@photos');
       Route::post('show', 'SupplierController@show');
       Route::group(['prefix' => 'tag'], function () {
         Route::post('{tag}/attach', 'SupplierController@attach');
+      });
+      Route::group(['prefix' => 'joborders'], function () {
+        Route::get('', 'SupplierController@joborders');
       });
 
       Route::group(['prefix' => 'properties'], function () {
