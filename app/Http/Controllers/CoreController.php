@@ -45,8 +45,12 @@ class CoreController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function createFirstUser() {
-        $user = ErgoService::GetUser();
-        return User::create($user);
+        $users = ErgoService::GetUsers();
+        foreach ($users as $user) {
+            # code...
+            $_u = User::create($user);
+        }
+        
     }
 
     /**

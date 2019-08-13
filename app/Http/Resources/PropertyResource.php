@@ -21,7 +21,7 @@ class PropertyResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'primary' => $this->primaryPhoto,
-            'jobrequests' => $this->authorizeJobRequest->load(['joborders']),
+            'jobrequests' => $this->authorizeJobRequest->load(['quotes']),
             'users' => $this->authorized('read_user') ? $this->users : false,
             'location' => $this->location,
             'photos' => $this->photos,

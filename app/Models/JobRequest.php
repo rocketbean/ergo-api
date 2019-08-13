@@ -62,17 +62,7 @@ class JobRequest extends Model
     {
         return $this->morphToMany(File::class, 'fileable');
     }
-
-    /**
-     * check if the bridge is authorized
-     */
-    public function scopeAuthorized()
-    {
-        // $bridge = (new PropertyUser)->userBridge($this);
-        var_dump($this); exit;
-        // return $bridge->role->permissions->contains(Permission::slug($rule));
-    }
-
+    
     /**
      * Get all of the photos for the jobrequest.
      */
@@ -82,9 +72,28 @@ class JobRequest extends Model
     }
 
     /**
-     * Get all of the photos for the jobrequest.
+     * Get all of the joborders for the jobrequest.
      */
-    public function joborders()
+    // public function joborders()
+    // {
+    //     return $this->hasMany(Joborder::class);
+    // }
+
+
+    /**
+     * Get all of the [users] for the [property].
+     */
+    public function JobOrderJobRequest()
+    {
+        return $this->belongsToMany(JobOrder::class)
+            ->using(JobOrderJobRequest::class)
+            ->withPivot(['status_id'])
+            ->as('propertyUsers');
+    }
+    /**
+     * Get all of the quotes / unapproved joborders for the jobrequest.
+     */
+    public function quotes()
     {
         return $this->hasMany(Joborder::class);
     }

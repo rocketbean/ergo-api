@@ -49,10 +49,19 @@ return [
   ],
 
 
-  'firstuser' => [
-    'name'      => 'Nikko Mesina',
-    'role_id'   => 1,
-    'email'     => 'nikko@homeprezzo.com',
+  'firstusers' => [
+    [
+      'name'      => 'Nikko Mesina',
+      'role_id'   => 1,
+      'email'     => 'nikko@homeprezzo.com',
+      'password'  => '$2y$12$9G3p50NJPGGN9nOGz/mWfuuFNqXo35azSXACRhDcQ2ctv2BuovHq2' // qweqwe
+    ],
+    [
+    'name'      => 'N mesina',
+    'role_id'   => 2,
+    'email'     => 'buzzokkin@gmail.com',
     'password'  => '$2y$12$9G3p50NJPGGN9nOGz/mWfuuFNqXo35azSXACRhDcQ2ctv2BuovHq2' // qweqwe
+    ]
+
   ]
 ];

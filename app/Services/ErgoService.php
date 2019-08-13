@@ -16,7 +16,7 @@ class ErgoService {
       return $config[$disk];
   }
 
-  public static function GetUser () {
-      return config('ergo.firstuser');
+  public static function GetUsers () {
+      return config('ergo.firstusers');
   }
 }

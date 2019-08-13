@@ -60,7 +60,7 @@ class PropertyController extends Controller
     public function show(Property $property)
     {  
         // return $property->load(['photos', 'location', 'videos','users', 'jobrequests.joborders']);
-        return new PropertyResource($property->load(['photos', 'location', 'videos','users', 'jobrequests.joborders']));
+        return new PropertyResource($property->load(['photos', 'location', 'videos','users', 'jobrequests.quotes']));
     }
 
     /**

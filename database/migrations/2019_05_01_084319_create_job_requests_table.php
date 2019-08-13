@@ -25,6 +25,14 @@ class CreateJobRequestsTable extends Migration
             $table->text('uploaderData')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('job_order_job_request', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('job_request_id')->index();
+            $table->bigInteger('job_order_id')->index();
+            $table->bigInteger('status_id')->default(1)->index();
+            $table->timestamps();
+        });
     }
 
     /**
