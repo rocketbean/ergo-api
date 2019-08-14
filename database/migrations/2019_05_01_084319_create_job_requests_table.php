@@ -43,5 +43,6 @@ class CreateJobRequestsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('job_requests');
+        Schema::dropIfExists('job_order_job_request');
     }
 }

@@ -72,6 +72,8 @@ class JobOrderController extends Controller
                 $joi = $jo->items()->create([
                     'amount' => $item['amount'],
                     'remarks' => $item['description'],
+                    'timetable' => $item['timetable'],
+                    'timetable_type' => $item['timetable_type'],
                     'user_id' => Auth::user()->id,
                     'job_request_item_id' => $item['jobrequestitem']['id'],
                     'job_request_id' => $jr->id,
