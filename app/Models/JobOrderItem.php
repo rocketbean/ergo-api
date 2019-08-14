@@ -39,6 +39,13 @@ class JobOrderItem extends Model
       return $this->belongsTo(Supplier::class);
     }
 
+    public function approve () {
+      return $this->update(['status_id' => 3]);
+    }
+
+    public function deny () {
+      return $this->update(['status_id' => 0]);
+    }
 
     /**
      * Get all of the tags for the post.

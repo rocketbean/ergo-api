@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\JobOrder;
 use App\Models\JobOrderItem;
+use App\Models\JobRequestItem;
 use App\Models\JobRequest;
 use App\Models\Property;
 use App\Models\Supplier;
@@ -194,10 +195,21 @@ class JobOrderController extends Controller
      * @param  \App\Models\JobOrder  $jobOrder
      * @return \Illuminate\Http\Response
      */
-    public function approve (JobOrder $jo, JobRequest $jr) {
+    public function approve (JobOrder $jo, JobRequest $jr, Request $request) {
         $user = Auth::user();
         $njo  = JobOrder::Approve($jo, $user);
         $njr  = JobRequest::Approve($jr, $jo, $user);
+        foreach ($request->items as $item) {
+            $joi = JobOrderItem::find($item['id']);
+            if($item['_selected']) {
+                $jri = JobRequestItem::find($item['job_request_id']);
+                $joi->approve();
+                $jri->approve($joi);
+            } else {
+                $joi->deny();
+            }
+        }
+        
         $jo->supplier->user->notify(new approveJobOrder($jo, $jr, $jr->property));
         return [
             'joborder' => $njo,

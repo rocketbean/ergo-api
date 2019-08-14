@@ -12,7 +12,7 @@ class JobRequestItem extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['photos', 'videos', 'files', 'tags'];
+    protected $with = ['photos', 'videos', 'files', 'tags', 'joborderitem'];
 
     public function user () {
       return $this->belongsTo(User::class);
@@ -38,6 +38,17 @@ class JobRequestItem extends Model
     /**
      * Get all of the photos for the jobrequest.
      */
+    public function approve(JobOrderItem $item)
+    {
+        return $this->update([
+            'job_order_item_id' => $item->id,
+            'status_id' => 3
+        ]);
+    }
+
+    /**
+     * Get all of the photos for the jobrequest.
+     */
     public function attachments()
     {
         return $this->morphToMany(Attachment::class, 'attachable');
@@ -58,6 +69,22 @@ class JobRequestItem extends Model
     public function videos()
     {
         return $this->morphToMany(Video::class, 'videoable');
+    }
+
+    /**
+     * Get all of the [videos] for the [property].
+     */
+    public function joborderitem()
+    {
+        return $this->belongsTo(JobOrderItem::class, 'job_order_item_id');
+    }
+
+    /**
+     * Get all of the [videos] for the [property].
+     */
+    public function joborderitems()
+    {
+        return $this->hasMany(JobOrderItem::class);
     }
 
     /**

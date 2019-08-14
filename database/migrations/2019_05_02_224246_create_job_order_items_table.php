@@ -18,10 +18,10 @@ class CreateJobOrderItemsTable extends Migration
             $table->bigInteger('user_id')->index();
             $table->bigInteger('job_order_id')->index();
             $table->bigInteger('job_request_item_id')->index();
+            $table->integer('status_id')->default(1);
             $table->bigInteger('job_request_id')->index();
             $table->bigInteger('property_id')->index();
             $table->bigInteger('supplier_id')->index();
-            $table->integer('status')->default()->index();
             $table->text('remarks');
             $table->float('amount', 8, 2);
             $table->timestamps();
