@@ -17,7 +17,7 @@ class JobRequestController extends Controller
      */
     public function index(JobRequest $jr)
     {
-        return $jr->load(['items', 'joborder']);
+        return $jr->load(['items', 'joborders']);
     }
 
     /**

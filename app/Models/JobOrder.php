@@ -10,7 +10,7 @@ class JobOrder extends Model
 {
     protected $guarded = [];
 
-    protected $with = ['photos', 'files', 'videos','items', 'supplier', 'property' , 'jobrequest'];
+    protected $with = ['photos', 'files', 'videos','items', 'supplier', 'property' ];
 
     protected $dates = ['created_at'];
 

@@ -74,22 +74,23 @@ class JobRequest extends Model
     /**
      * Get all of the joborders for the jobrequest.
      */
-    // public function joborders()
-    // {
-    //     return $this->hasMany(Joborder::class);
-    // }
+    public function joborders()
+    {
+        return $this->hasMany(Joborder::class)->where('status_id', '>', 2);
+    }
 
 
     /**
      * Get all of the [users] for the [property].
      */
-    public function JobOrderJobRequest()
-    {
-        return $this->belongsToMany(JobOrder::class)
-            ->using(JobOrderJobRequest::class)
-            ->withPivot(['status_id'])
-            ->as('propertyUsers');
-    }
+    // public function joborders()
+    // {
+    //     return $this->belongsToMany(JobOrder::class)
+    //         ->using(JobOrderJobRequest::class)
+    //         ->withPivot(['status_id'])
+    //         ->as('propertyUsers');
+    // }
+    
     /**
      * Get all of the quotes / unapproved joborders for the jobrequest.
      */
