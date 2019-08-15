@@ -25,6 +25,10 @@ class JobOrderController extends Controller
      */
     public function index(JobOrder $jo)
     {
+        foreach ($jo->items as $item) {
+            $item->jobrequestitem = JobRequestItem::find($item->job_request_item_id);
+            # code...
+        }
         return $jo;
     }
 

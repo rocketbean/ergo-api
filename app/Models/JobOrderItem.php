@@ -12,7 +12,7 @@ use App\Models\Supplier;
 
 class JobOrderItem extends Model
 {
-    protected $with = ['photos', 'videos', 'files', 'tags', 'jobrequestitem'];
+    protected $with = ['photos', 'videos', 'files', 'tags'];
     protected $guarded = [];
 
     public function user () {

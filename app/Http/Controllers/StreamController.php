@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\JobRequest;
 use App\Models\Supplier;
-
+use App\Http\Resources\StreamJobRequestResourceCollection;
 use Illuminate\Http\Request;
 
 class StreamController extends Controller
@@ -16,12 +16,11 @@ class StreamController extends Controller
      */
     public function index(Supplier $supplier)
     {
-        return JobRequest::where('status_id', 2)
-            ->whereDoesntHave('quotes', function($query) use ($supplier) {
-              $query->whereIn('supplier_id', [ $supplier->id]);
+        $jobrequests = JobRequest::whereDoesntHave('quotes', function($query) use ($supplier) {
+                $query->whereIn('supplier_id', [ $supplier->id]);
             })
-            ->get()
-            ->load('property');
+            ->get();
+        return new StreamJobRequestResourceCollection($jobrequests);
         
     }
 

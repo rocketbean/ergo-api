@@ -5,6 +5,7 @@ use App\Models\Property;
 use App\Models\Supplier;
 use App\Models\Tag;
 use App\Models\Photo;
+use App\Models\JobRequestItem;
 use App\Services\AuthDriverService;
 use Auth;
 use Illuminate\Http\Request;
@@ -60,7 +61,13 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        return $supplier->load(['joborders', 'photos', 'location', 'videos','users']);
+        $supplier->load(['joborders.jobrequest', 'photos', 'location', 'videos','users']);
+        foreach ($supplier->joborders as $joborder) {
+            foreach ($joborder->items as $item) {
+                $item->jobrequestitem = JobRequestItem::find($item->job_request_item_id);
+            }
+        }
+        return $supplier;
     }
 
     /**

@@ -34,9 +34,17 @@ class JobRequest extends Model
     /**
      * Get all of the tags for the jobrequest.
      */
-    public function items()
+    public function items($pending = false)
     {
-        return $this->hasMany(JobRequestItem::class);
+            return $this->hasMany(JobRequestItem::class);
+    }
+
+    /**
+     * Get all of the tags for the jobrequest.
+     */
+    public function pendingItems()
+    {
+            return $this->hasMany(JobRequestItem::class)->whereNull('job_order_item_id');
     }
     
     /**
