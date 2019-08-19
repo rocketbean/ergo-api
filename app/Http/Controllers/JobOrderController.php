@@ -208,9 +208,10 @@ class JobOrderController extends Controller
         foreach ($request->items as $item) {
             $joi = JobOrderItem::find($item['id']);
             if($item['_selected']) {
-                $jri = JobRequestItem::find($item['job_request_id']);
+                $jri = JobRequestItem::find($item['job_request_item_id']);
                 $joi->approve();
                 $jri->approve($joi);
+                var_dump($item["job_request_item_id"]); exit;
             } else {
                 $joi->deny();
             }
@@ -230,10 +231,12 @@ class JobOrderController extends Controller
      * @param  \App\Models\JobOrder  $jobOrder
      * @return \Illuminate\Http\Response
      */
-    public function confirm (JobOrder $jo, JobRequest $jr) {
+    public function confirm (JobOrder $jo, JobRequest $jr, JobOrderItem $item) {
         $user = Auth::user();
         $njo  = JobOrder::Confirm($jo, $user);
         $njr  = JobRequest::Confirm($jr, $jo, $user);
+        $item->update(['status_id' => 4]);
+        $item->jobrequestitem->update(['status_id' => 4]);
         $jr->property->push_notification(new confirmJobOrder($jo, $jr, $jo->supplier));
         return [
             'joborder' => $njo,
@@ -248,10 +251,12 @@ class JobOrderController extends Controller
      * @param  \App\Models\JobOrder  $jobOrder
      * @return \Illuminate\Http\Response
      */
-    public function complete (JobOrder $jo, JobRequest $jr) {
+    public function complete (JobOrder $jo, JobRequest $jr, JobOrderItem $item) {
         $user = Auth::user();
         $njo  = JobOrder::Complete($jo, $user);
         $njr  = JobRequest::Complete($jr, $jo, $user);
+        $item->update(['status_id' => 5]);
+        $item->jobrequestitem->update(['status_id' => 5]);
         $jr->property->push_notification(new completeJobOrder($jo, $jr, $jo->supplier));
         return [
             'joborder' => $njo,
@@ -270,6 +275,8 @@ class JobOrderController extends Controller
         $user = Auth::user();
         $njo  = JobOrder::InProgress($jo, $user);
         $njr  = JobRequest::InProgress($jr, $jo, $user);
+        $item->update(['status_id' => 4]);
+        $item->jobrequestitem->update(['status_id' => 4]);
         $jr->property->push_notification(new rollbackJobOrder($jo, $jr, $jo->supplier));
         return [
             'joborder' => $njo,

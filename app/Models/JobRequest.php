@@ -132,7 +132,6 @@ class JobRequest extends Model
     {
       $jr->update([
         'status_id'     => 3,
-        'job_order_id'  => $jo->id,
         'approved_by'   => $user->id,
       ]);
       return $jr;

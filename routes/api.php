@@ -92,10 +92,12 @@ Route::group(['middleware' => 'jwt.auth'], function () {
       Route::post('/', 'JobOrderController@index');
       Route::post('viewed', 'JobOrderController@viewed');
       Route::group(['prefix' => 'jobrequests/{jr}'], function () {
-        Route::post('approve', 'JobOrderController@approve');
-        Route::post('confirm', 'JobOrderController@confirm');
-        Route::post('rollback', 'JobOrderController@rollback');
-        Route::post('complete', 'JobOrderController@complete');
+        Route::group(['prefix' => 'item/{item}'], function () {
+          Route::post('approve', 'JobOrderController@approve');
+          Route::post('confirm', 'JobOrderController@confirm');
+          Route::post('rollback', 'JobOrderController@rollback');
+          Route::post('complete', 'JobOrderController@complete');
+        });
       });
     });
   });
