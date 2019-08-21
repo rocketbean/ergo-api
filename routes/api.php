@@ -47,7 +47,12 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   Route::group(['prefix' => 'directions'], function () {
     Route::get('jobrequest/{jr}', 'LocationController@JobRequestDirection');
   });
-
+  /*
+    settings
+  */
+  Route::group(['prefix' => 'settings'], function () {
+    Route::get('user/{user}', 'UserController@index');
+  });
   /*
     Photos
   */
