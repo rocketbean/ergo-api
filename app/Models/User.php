@@ -19,9 +19,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -42,7 +40,8 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $with = [
-        'suppliers'
+        'suppliers',
+        'primary'
     ];
 
     public static function validate(Request $request)

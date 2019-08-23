@@ -51,7 +51,10 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     settings
   */
   Route::group(['prefix' => 'settings'], function () {
-    Route::get('user/{user}', 'UserController@index');
+    Route::group(['prefix' => 'user/{user}'], function () {
+      Route::get('/', 'UserController@index');
+      Route::post('primary/{photo}', 'UserController@primary');
+    });
   });
   /*
     Photos

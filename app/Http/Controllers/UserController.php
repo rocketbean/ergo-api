@@ -5,7 +5,6 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Photo;
-
 class UserController extends Controller
 {
     public function index(User $user) {
@@ -13,8 +12,8 @@ class UserController extends Controller
     }
     
     public function primary(User $user, Photo $photo) {
-      Auth::user()->update(['primary' => 1]);
-      return Auth::user();
+      $user->update(['primary' => $photo->id]);
+      return $user;
     }
 
 }
