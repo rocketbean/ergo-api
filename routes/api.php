@@ -6,9 +6,9 @@ use App\Notifications\newQuote;
 use Illuminate\Http\Request;
 
 /*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------|
+| API Routes                                                               |
+|--------------------------------------------------------------------------|
 |
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
@@ -45,7 +45,10 @@ Route::group(['middleware' => 'jwt.auth'], function () {
   });
 
   Route::group(['prefix' => 'directions'], function () {
-    Route::get('jobrequest/{jr}', 'LocationController@JobRequestDirection');
+    Route::group(['prefix' => 'jobrequest/{jr}'], function () {
+      Route::get('/', 'LocationController@JobRequestDirection');
+      Route::get('item/{item}', 'LocationController@JobRequestItemDirection');
+    });
   });
   /*
     settings
@@ -100,8 +103,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
       Route::post('/', 'JobOrderController@index');
       Route::post('viewed', 'JobOrderController@viewed');
       Route::group(['prefix' => 'jobrequests/{jr}'], function () {
+        Route::post('approve', 'JobOrderController@approve');
         Route::group(['prefix' => 'item/{item}'], function () {
-          Route::post('approve', 'JobOrderController@approve');
           Route::post('confirm', 'JobOrderController@confirm');
           Route::post('rollback', 'JobOrderController@rollback');
           Route::post('complete', 'JobOrderController@complete');
@@ -142,8 +145,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     });
   });
 
-  /*
-    suppliers
+  /* 
+    suppliers 
   */
   Route::group(['prefix' => 'suppliers'], function () {
     Route::post('', 'SupplierController@index');
@@ -152,7 +155,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
       Route::post('update/primary/{photo}', 'SupplierController@primary');
       Route::get('photos', 'SupplierController@photos');
       Route::post('show', 'SupplierController@show');
-      Route::group(['prefix' => 'tag'], function () {
+      Route::group(['prefix' => 'tag'], function () { 
         Route::post('{tag}/attach', 'SupplierController@attach');
       });
       Route::group(['prefix' => 'joborders'], function () {
@@ -165,7 +168,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
             Route::group(['prefix' => '{jr}'], function () {
               Route::group(['prefix' => 'joborders'], function () {
                 Route::post('store', 'JobOrderController@store');
-                
                 Route::group(['prefix' => '{jo}'], function () {
                   Route::post('publish', 'JobOrderController@publish');
                   Route::group(['prefix' => 'items'], function () {

@@ -211,7 +211,6 @@ class JobOrderController extends Controller
                 $jri = JobRequestItem::find($item['job_request_item_id']);
                 $joi->approve();
                 $jri->approve($joi);
-                var_dump($item["job_request_item_id"]); exit;
             } else {
                 $joi->deny();
             }
