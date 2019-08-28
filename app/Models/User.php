@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Auth;
 use App\Models\Photo;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
@@ -88,6 +88,25 @@ class User extends Authenticatable implements JWTSubject
     // {
     //     return $this->hasMany(Property::class);
     // }
+
+    /**
+     * Activity relations.
+     */
+    public function activity()
+    {
+        return $this->morphOne(Activity::class, 'loggable');
+    }
+
+    /**
+     * creates loggable acivity
+     */
+    public function logActivity(Array $data, $model)
+    {
+        $data['user_id'] = Auth::user()->id;
+        $data['target_id'] = $model->id;
+        $data['target_type'] = 'App\\Models\\' . class_basename($model);
+        return $this->activity()->create($data);
+    }
     
     /**
      * Get all of the [photos] for the [user].

@@ -105,7 +105,7 @@ class Property extends Model
     {
         $data['user_id'] = Auth::user()->id;
         $data['target_id'] = $model->id;
-        $data['target_type'] = class_basename($model);
+        $data['target_type'] = 'App\\Models\\' . class_basename($model);
         return $this->activity()->create($data);
     }
 

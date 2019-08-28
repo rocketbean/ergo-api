@@ -36,19 +36,15 @@ class PropertyController extends Controller
      */
     public function store(Request $request)
     {
+        $user     = User::find(Auth::user()->id);
         $property = Property::create([
-            'user_id'     => Auth::user()->id,
+            'user_id'     => $user->id,
             'name'        => $request->name,
             'description' => $request->description,
             'primary'     => 1
         ]);
-
         $property->users()->attach(Auth::user()->id, ['role_id' => 1, 'status' => 1]);
-
-        $property->logActivity([
-            'description' => 'test 2',
-            'activity' => 'test 2'
-        ]);
+        $user->logActivity(['description' => ' created ', 'activity' => 'created'], $property);
         return $property;
     }
 
@@ -119,6 +115,7 @@ class PropertyController extends Controller
     public function primary(Property $property, Photo $photo)
     {
         $property->update(['primary' => $photo->id]);
+        $property->logActivity(['description' => ' primary has been updated to ', 'activity' => 'update'], $photo);
         return Property::find($property->id);
     }
 
