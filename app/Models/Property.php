@@ -91,6 +91,25 @@ class Property extends Model
     }
 
     /**
+     * Activity relations.
+     */
+    public function activity()
+    {
+        return $this->morphOne(Activity::class, 'loggable');
+    }
+
+    /**
+     * creates loggable acivity
+     */
+    public function logActivity(Array $data, $model)
+    {
+        $data['user_id'] = Auth::user()->id;
+        $data['target_id'] = $model->id;
+        $data['target_type'] = class_basename($model);
+        return $this->activity()->create($data);
+    }
+
+    /**
      * Get all of the [users] for the [property].
      */
     public function users()

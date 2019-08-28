@@ -50,6 +50,16 @@ Route::group(['middleware' => 'jwt.auth'], function () {
       Route::get('item/{item}', 'LocationController@JobRequestItemDirection');
     });
   });
+
+  /*
+    activity
+  */
+  Route::group(['prefix' => 'activity'], function () {
+    Route::group(['prefix' => 'property/{property}'], function () {
+      Route::post('logs', 'PropertyController@testlog');
+    });
+  });
+
   /*
     settings
   */

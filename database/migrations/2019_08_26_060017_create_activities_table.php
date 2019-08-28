@@ -18,6 +18,8 @@ class CreateActivitiesTable extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('loggable_id');
             $table->string('loggable_type');
+            $table->bigInteger('target_id')->nullable();
+            $table->string('target_type')->nullable();
             $table->string('activity');
             $table->text('description');
             $table->timestamps();

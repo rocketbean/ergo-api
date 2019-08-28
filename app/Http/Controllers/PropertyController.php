@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Models\Property;
 use App\Models\Photo;
+use App\Models\Activity;
 use App\Models\User;
 use App\Models\Permission;
 use App\Models\Tag;
@@ -23,16 +24,10 @@ class PropertyController extends Controller
         return $user->properties;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function testlog (Property $property) {
+        $user = Auth::user();
+        return $property->logActivity(['description' => ' has been invited ', 'activity' => 'invite'], $user);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -47,7 +42,13 @@ class PropertyController extends Controller
             'description' => $request->description,
             'primary'     => 1
         ]);
+
         $property->users()->attach(Auth::user()->id, ['role_id' => 1, 'status' => 1]);
+
+        $property->logActivity([
+            'description' => 'test 2',
+            'activity' => 'test 2'
+        ]);
         return $property;
     }
 
@@ -105,6 +106,7 @@ class PropertyController extends Controller
      */
     public function attach(Property $property, Tag $tag)
     {
+
         return $property->tags()->attach($tag->id);
     }
 
@@ -169,6 +171,7 @@ class PropertyController extends Controller
     {
         $user = User::where('email', $request->email)->first();
         if($user) {
+            $property->logActivity(['description' => ' has been invited ', 'activity' => 'invite'], $user);
             $property->users()->attach($user->id, ['role_id' => $request->role, 'status' => 2 ]);
             return $property->propertyUsers;
         } else {
