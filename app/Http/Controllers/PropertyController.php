@@ -24,10 +24,6 @@ class PropertyController extends Controller
         return $user->properties;
     }
 
-    public function testlog (Property $property) {
-        $user = Auth::user();
-        return $property->logActivity(['description' => ' has been invited ', 'activity' => 'invite'], $user);
-    }
     /**
      * Store a newly created resource in storage.
      *

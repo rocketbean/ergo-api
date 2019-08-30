@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Property;
@@ -99,6 +100,25 @@ class Supplier extends Model
     public function videos()
     {
         return $this->morphToMany(Video::class, 'videoable');
+    }
+
+    /**
+     * Activity relations.
+     */
+    public function activity()
+    {
+        return $this->morphOne(Activity::class, 'loggable');
+    }
+
+    /**
+     * creates loggable acivity
+     */
+    public function logActivity(Array $data, $model)
+    {
+        $data['user_id'] = Auth::user()->id;
+        $data['target_id'] = $model->id;
+        $data['target_type'] = 'App\\Models\\' . class_basename($model);
+        return $this->activity()->create($data);
     }
 
     /**

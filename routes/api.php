@@ -118,6 +118,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
           Route::post('confirm', 'JobOrderController@confirm');
           Route::post('rollback', 'JobOrderController@rollback');
           Route::post('complete', 'JobOrderController@complete');
+          Route::post('done', 'JobOrderController@done');
         });
       });
     });

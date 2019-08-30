@@ -10,6 +10,8 @@ use App\Models\Supplier;
 use App\Notifications\approveJobOrder;
 use App\Notifications\completeJobOrder;
 use App\Notifications\confirmJobOrder;
+use App\Notifications\rollbackJobOrder;
+use App\Notifications\accomplishJobOrder;
 use App\Notifications\newQuote;
 use Auth;
 use Illuminate\Http\Request;
@@ -39,7 +41,7 @@ class JobOrderController extends Controller
      */
     public function joborders(Supplier $supplier)
     {
-        return $supplier->joborders;
+        return $supplier->joborders->load(['jobrequest']);
     }
 
     /**
@@ -117,6 +119,8 @@ class JobOrderController extends Controller
                 }
             }
             $property->push_notification(new newQuote($jo, $jr, $supplier));
+            $property->logActivity(['description' => ' submitted a quote ', 'activity' => 'create'], $jo);
+            $supplier->logActivity(['description' => ' submitted a quote ', 'activity' => 'create'], $jo);
             return $jo->load(['photos', 'files', 'videos','items']);
         }
     }
@@ -209,6 +213,8 @@ class JobOrderController extends Controller
             $joi = JobOrderItem::find($item['id']);
             if($item['_selected']) {
                 $jri = JobRequestItem::find($item['job_request_item_id']);
+                $jr->property->logActivity(['description' => ' approved ', 'activity' => 'update'], $joi);
+                $jo->supplier->logActivity(['description' => ' approved ', 'activity' => 'update'], $joi);
                 $joi->approve();
                 $jri->approve($joi);
             } else {
@@ -237,6 +243,9 @@ class JobOrderController extends Controller
         $item->update(['status_id' => 4]);
         $item->jobrequestitem->update(['status_id' => 4]);
         $jr->property->push_notification(new confirmJobOrder($jo, $jr, $jo->supplier));
+        $jr->property->logActivity(['description' => ' confirmed ', 'activity' => 'update'], $item->jobrequestitem);
+        $jo->supplier->logActivity(['description' => ' confirmed ', 'activity' => 'update'], $item->jobrequestitem);
+
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
@@ -257,6 +266,30 @@ class JobOrderController extends Controller
         $item->update(['status_id' => 5]);
         $item->jobrequestitem->update(['status_id' => 5]);
         $jr->property->push_notification(new completeJobOrder($jo, $jr, $jo->supplier));
+        $jr->property->logActivity(['description' => ' completed ', 'activity' => 'update'], $item->jobrequestitem);
+        $jo->supplier->logActivity(['description' => ' completed ', 'activity' => 'update'], $item->jobrequestitem);
+        return [
+            'joborder' => $njo,
+            'jobrequest' => $njr
+        ];
+
+    }
+
+    /**
+     * Set joborder as completed status
+     *
+     * @param  \App\Models\JobOrder  $jobOrder
+     * @return \Illuminate\Http\Response
+     */
+    public function done (JobOrder $jo, JobRequest $jr, JobOrderItem $item) {
+        $user = Auth::user();
+        $njo  = JobOrder::Complete($jo, $user);
+        $njr  = JobRequest::Complete($jr, $jo, $user);
+        $item->update(['status_id' => 6]);
+        $item->jobrequestitem->update(['status_id' => 6]);
+        $jr->property->push_notification(new accomplishJobOrder($jo, $jr, $jo->supplier));
+        $jr->property->logActivity(['description' => ' marked as done ', 'activity' => 'update'], $item->jobrequestitem);
+        $jo->supplier->logActivity(['description' => ' marked as done ', 'activity' => 'update'], $item->jobrequestitem);
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
@@ -270,13 +303,15 @@ class JobOrderController extends Controller
      * @param  \App\Models\JobOrder  $jobOrder
      * @return \Illuminate\Http\Response
      */
-    public function rollback (JobOrder $jo, JobRequest $jr) {
+    public function rollback (JobOrder $jo, JobRequest $jr, JobOrderItem $item) {
         $user = Auth::user();
         $njo  = JobOrder::InProgress($jo, $user);
         $njr  = JobRequest::InProgress($jr, $jo, $user);
         $item->update(['status_id' => 4]);
         $item->jobrequestitem->update(['status_id' => 4]);
         $jr->property->push_notification(new rollbackJobOrder($jo, $jr, $jo->supplier));
+        $jr->property->logActivity(['description' => ' rolled back ', 'activity' => 'update'], $item->jobrequestitem);
+        $jo->supplier->logActivity(['description' => ' rolled back ', 'activity' => 'update'], $item->jobrequestitem);
         return [
             'joborder' => $njo,
             'jobrequest' => $njr
