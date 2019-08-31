@@ -292,7 +292,8 @@ class JobOrderController extends Controller
         $jo->supplier->logActivity(['description' => ' marked as done ', 'activity' => 'update'], $item->jobrequestitem);
         return [
             'joborder' => $njo,
-            'jobrequest' => $njr
+            'jobrequest' => $njr,
+            'item' => $item
         ];
 
     }
@@ -314,7 +315,8 @@ class JobOrderController extends Controller
         $jo->supplier->logActivity(['description' => ' rolled back ', 'activity' => 'update'], $item->jobrequestitem);
         return [
             'joborder' => $njo,
-            'jobrequest' => $njr
+            'jobrequest' => $njr,
+            'item' => $item
         ];
 
     }
