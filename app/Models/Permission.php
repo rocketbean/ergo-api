@@ -135,6 +135,133 @@ class Permission extends Model
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
           ],
+          // supplier's permissions
+          [
+              'name'            => 'Publish',
+              'slug'            => 'publish_jobrequest',
+              'description'     => 'Permission to publish own jobrequest',
+              'type'            => JobOrder::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Update',
+              'slug'            => 'update_JobOrder',
+              'description'     => 'Permission to Update own JobOrder',
+              'type'            => JobOrder::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Delete',
+              'slug'            => 'delete_JobOrder',
+              'description'     => 'Permission to Delete',
+              'type'            => JobOrder::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          // Users
+          [
+              'name'            => 'Approve',
+              'slug'            => 'approve_user',
+              'description'     => 'Permission to approve',
+              'type'            => User::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Invite',
+              'slug'            => 'invite_user',
+              'description'     => 'Permission to invite',
+              'type'            => User::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Read Only',
+              'slug'            => 'read_user',
+              'description'     => 'Permission to view',
+              'type'            => User::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Update',
+              'slug'            => 'update_user',
+              'description'     => 'Permission to Update',
+              'type'            => User::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Delete',
+              'slug'            => 'delete_user',
+              'description'     => 'Permission to Delete',
+              'type'            => User::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          // joborders
+          [
+              'name'            => 'Approve',
+              'slug'            => 'approve_joborder',
+              'description'     => 'Permission to approve',
+              'type'            => JobOrder::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Read Only',
+              'slug'            => 'read_joborder',
+              'description'     => 'Permission to view',
+              'type'            => JobOrder::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          [
+              'name'            => 'Delete',
+              'slug'            => 'delete_joborder',
+              'description'     => 'Permission to Delete',
+              'type'            => JobOrder::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+          //properties
+          [
+              'name'            => 'Show',
+              'slug'            => 'show_JobOrders',
+              'description'     => 'show all JobOrders',
+              'type'            => Supplier::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+
+          [
+              'name'            => 'Update',
+              'slug'            => 'update_JobOrders',
+              'description'     => 'permission to update all jobrequests',
+              'type'            => Supplier::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+
+          [
+              'name'            => 'Update',
+              'slug'            => 'update_settings',
+              'description'     => 'allow update Supplier settings',
+              'type'            => Supplier::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
+
+          [
+              'name'            => 'Notify',
+              'slug'            => 'receive_notifications',
+              'description'     => 'receive notifications from all jobrequests',
+              'type'            => Supplier::class,
+              'permission_type' => SupplierUser::class,
+              'group'           => Supplier::class
+          ],
     ];
   }
 

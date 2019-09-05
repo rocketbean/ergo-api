@@ -82,7 +82,7 @@ class SupplierController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * returns supplier assoc. photos
      *
      * @param  \App\Models\Property  $property
      * @return \Illuminate\Http\Response
@@ -90,6 +90,21 @@ class SupplierController extends Controller
     public function photos(Supplier $supplier)
     {
         return $supplier->photos;
+    }
+
+    /**
+     * returns supplier assoc. users
+     *
+     * @param  \App\Models\Property  $property
+     * @return \Illuminate\Http\Response
+     */
+    public function users(Supplier $supplier)
+    {
+            foreach ($supplier->supplierUsers as $user) {
+                $user->supplierUsers->load(['role']);
+            };
+            return $supplier->supplierUsers;
+        // return [];
     }
 
     /**

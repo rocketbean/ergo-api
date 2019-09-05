@@ -129,6 +129,17 @@ class Supplier extends Model
         return $this->belongsToMany(User::class)->withPivot('client_id');
     }
 
+    /**
+     * Get all of the [users] for the [supplier].
+     */
+    public function supplierUsers()
+    {
+        return $this->belongsToMany(User::class)
+            ->using(SupplierUser::class)
+            ->withPivot(['role_id', 'status'])
+            ->as('supplierUsers');
+    }
+
     public function newPivot(Model $parent, array $attributes, $table, $exists,  $using = null)
     {
         if ($parent instanceof User) {
