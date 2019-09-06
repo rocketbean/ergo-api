@@ -146,7 +146,7 @@ class Permission extends Model
           ],
           [
               'name'            => 'Update',
-              'slug'            => 'update_JobOrder',
+              'slug'            => 'update_joborder',
               'description'     => 'Permission to Update own JobOrder',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
@@ -154,7 +154,7 @@ class Permission extends Model
           ],
           [
               'name'            => 'Delete',
-              'slug'            => 'delete_JobOrder',
+              'slug'            => 'delete_joborder',
               'description'     => 'Permission to Delete',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
@@ -229,7 +229,7 @@ class Permission extends Model
           //properties
           [
               'name'            => 'Show',
-              'slug'            => 'show_JobOrders',
+              'slug'            => 'show_joborders',
               'description'     => 'show all JobOrders',
               'type'            => Supplier::class,
               'permission_type' => SupplierUser::class,
@@ -238,7 +238,7 @@ class Permission extends Model
 
           [
               'name'            => 'Update',
-              'slug'            => 'update_JobOrders',
+              'slug'            => 'update_joborders',
               'description'     => 'permission to update all jobrequests',
               'type'            => Supplier::class,
               'permission_type' => SupplierUser::class,

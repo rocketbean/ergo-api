@@ -4,12 +4,6 @@ namespace App\Models;
 
 use Auth;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Property;
-use App\Models\Tag;
-use App\Models\Location;
-use App\Models\JobOrder;
-use App\Models\Photo;
 use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Http\Rules\RedirectRule;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
@@ -41,6 +35,35 @@ class Supplier extends Model
     protected $with = [
         'primary'
     ];
+
+     public function authorizeJobOrder () {
+        if($this->authorized('show_joborders')) {
+            return $this->hasMany(JobOrder::class);
+        } else {
+            return $this->hasMany(JobOrder::class)->where('user_id', Auth::user()->id);
+        }
+     }
+
+    /**
+     * check if the bridge is authorized
+     */
+    public function authorized($rule, $user = false)
+    {
+        if(!$user) {
+            $bridge = (new SupplierUser)->userBridge($this);
+        } else {
+            $bridge = (new SupplierUser)->bridge($user, $this);
+        }
+        return $bridge->role->permissions->contains(Permission::slug($rule));
+    }
+
+    /**
+     * check if the bridge is authorized
+     */
+    public function role()
+    {
+        return (new SupplierUser)->userBridge($this);
+    }
 
     public function user () {
       return $this->belongsTo(User::class);
@@ -108,6 +131,14 @@ class Supplier extends Model
     public function activity()
     {
         return $this->morphOne(Activity::class, 'loggable');
+    }
+
+    /**
+     * Get all of the [photos] for the [property].
+     */
+    public function primaryPhoto()
+    {
+        return $this->belongsTo(Photo::class, 'primary');
     }
 
     /**
