@@ -7,6 +7,7 @@ use App\Models\JobRequestItem;
 use App\Models\JobRequest;
 use App\Models\Property;
 use App\Models\Supplier;
+use App\Models\Review;
 use App\Notifications\approveJobOrder;
 use App\Notifications\completeJobOrder;
 use App\Notifications\confirmJobOrder;
@@ -290,6 +291,7 @@ class JobOrderController extends Controller
         $jr->property->push_notification(new accomplishJobOrder($jo, $jr, $jo->supplier));
         $jr->property->logActivity(['description' => ' marked as done ', 'activity' => 'update'], $item->jobrequestitem);
         $jo->supplier->logActivity(['description' => ' marked as done ', 'activity' => 'update'], $item->jobrequestitem);
+        Review::addRespondent(Auth::user(),$jo->supplier);
         return [
             'joborder' => $njo,
             'jobrequest' => $njr,

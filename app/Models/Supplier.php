@@ -33,7 +33,8 @@ class Supplier extends Model
      * @var array
      */
     protected $with = [
-        'primary'
+        'primary',
+        'reviews'
     ];
 
      public function authorizeJobOrder () {
@@ -75,6 +76,10 @@ class Supplier extends Model
 
     public function location () {
       return $this->belongsTo(Location::class);
+    }
+
+    public function reviews () {
+      return $this->hasMany(Review::class);
     }
 
     /**

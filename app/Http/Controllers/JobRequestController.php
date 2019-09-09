@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Auth;
 use App\Models\JobRequest;
+use App\Models\Review;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use App\Notifications\NewJobRequest;
@@ -17,7 +18,11 @@ class JobRequestController extends Controller
      */
     public function index(JobRequest $jr)
     {
-        return $jr->load(['items', 'joborders']);
+        $jr->load(['items', 'joborders']);
+        foreach ($jr->items as $item) {
+            $item->joborderitem->supplier->enable_review = Review::enableRespondent(Auth::user(),$item->joborderitem->supplier);
+        }
+        return $jr;
     }
 
     /**
