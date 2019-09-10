@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Models\Review;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
+use App\Http\Resources\SupplierResource;
 
 class ReviewController extends Controller
 {
@@ -33,9 +36,23 @@ class ReviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Supplier $supplier, Request $request)
     {
-        //
+       $review = $supplier->reviews->where('reviewer_id', Auth::user()->id)
+                    ->where('status_id', 2)
+                    ->first();
+        if(!Review::enableRespondent(Auth::user(), $supplier)) {
+            $supplier->computescore();
+            $review->update([
+                'content' => $request->remarks,
+                'score' => $request->score,
+                'status_id' => 1,
+            ]);
+            return new SupplierResource($supplier->load(['photos', 'location', 'videos','users', 'joborders.jobrequest']));
+
+        }
+        return response()->json("you've already submitted a review for " . $supplier->name, 403);
+
     }
 
     /**

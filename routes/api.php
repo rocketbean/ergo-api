@@ -170,6 +170,9 @@ Route::group(['middleware' => 'jwt.auth'], function () {
       Route::group(['prefix' => 'tag'], function () { 
         Route::post('{tag}/attach', 'SupplierController@attach');
       });
+      Route::group(['prefix' => 'reviews'], function () { 
+        Route::post('store', 'ReviewController@store');
+      });
       Route::group(['prefix' => 'joborders'], function () {
         Route::get('', 'SupplierController@joborders');
       });

@@ -62,15 +62,7 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        // $supplier->load(['joborders.jobrequest', 'photos', 'location', 'videos','users']);
-        // foreach ($supplier->joborders as $joborder) {
-        //     foreach ($joborder->items as $item) {
-        //         $item->jobrequestitem = JobRequestItem::find($item->job_request_item_id);
-        //     }
-        // }
-        // return $supplier;
         return new SupplierResource($supplier->load(['photos', 'location', 'videos','users', 'joborders.jobrequest']));
-
     }
 
     /**

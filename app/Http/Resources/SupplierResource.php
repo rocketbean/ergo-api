@@ -29,6 +29,7 @@ class SupplierResource extends JsonResource
             'description' => $this->description,
             'primary' => $this->primaryPhoto,
             'joborders' => $joboders,
+            'ratings' => $this->ratings,
             'users' => $this->authorized('read_user') ? $this->users : false,
             'location' => $this->location,
             'photos' => $this->photos,

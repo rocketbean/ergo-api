@@ -55,7 +55,10 @@ class Supplier extends Model
         } else {
             $bridge = (new SupplierUser)->bridge($user, $this);
         }
-        return $bridge->role->permissions->contains(Permission::slug($rule));
+        if(isset($bridge->role)) {
+            return $bridge->role->permissions->contains(Permission::slug($rule));
+        }
+         return false;
     }
 
     /**
@@ -80,6 +83,32 @@ class Supplier extends Model
 
     public function reviews () {
       return $this->hasMany(Review::class);
+    }
+
+    /*
+    * counts the review score
+    */
+    public function computescore () {
+
+        $total       = 0;
+        $respondents = $this->getNoRespondents();
+        foreach ($this->getReviews() as $review) {
+            $total += $review->score;
+        }
+        $sum = $total / $respondents;
+        $this->update([
+            'ratings' => $sum
+        ]);
+    }
+
+    public function getNoRespondents () {
+
+        return count($this->reviews);
+    }
+
+    public function getReviews () {
+
+        return $this->reviews;
     }
 
     /**
