@@ -12,7 +12,7 @@ class Review extends Model
 	* returns the [User]
     */
     public function respondent () {
-    	return $this->belongsTo(User::class);
+    	return $this->belongsTo(User::class, 'reviewer_id');
     }
 
 

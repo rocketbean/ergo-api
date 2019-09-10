@@ -15,9 +15,10 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Supplier $supplier)
     {
-        //
+        $supplier->computescore();
+        return new SupplierResource($supplier, 'reviews');
     }
 
     /**

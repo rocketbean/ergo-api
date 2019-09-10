@@ -9,6 +9,14 @@ use App\Models\JobRequestItem;
 
 class SupplierResource extends JsonResource
 {
+
+    private $type;
+
+    public function __construct($resource, $type ='')
+    {
+        parent::__construct($resource);
+        $this->type = $type;
+    }
     /**
      * Transform the resource into an array.
      *
@@ -23,7 +31,7 @@ class SupplierResource extends JsonResource
                 $item->jobrequestitem = JobRequestItem::find($item->job_request_item_id);
             }
         }
-        return [
+        $arr = [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
@@ -39,5 +47,10 @@ class SupplierResource extends JsonResource
             'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
             'updated_at' => Carbon::parse($this->updated_at)->diffForHumans()
         ];
+        if($this->type === 'reviews') {
+            $arr['reviews'] = $this->reviews->load(['respondent']);
+        }
+
+        return $arr;
     }
 }

@@ -33,17 +33,17 @@ return [
   'driver' => [
     'local' => [
       'status'    => 'configurable',
-      'auth_url'  => 'http://localhost/ergo-api/public/',
+      'auth_url'  => 'http://localhost/',
       'userkey'   => '_key'
     ],
     'dev' => [
       'status'    => 'configurable',
-      'auth_url'  => 'http://localhost/ergo-api/public/',
+      'auth_url'  => 'http://localhost/',
       'userkey'   => '_key'
     ],
     'prod' => [
       'status' => 'configurable',
-      'auth_url' => 'http://localhost/ergo-api/public/',
+      'auth_url' => 'http://localhost/',
       'userkey'   => '_key'
     ]
   ],
