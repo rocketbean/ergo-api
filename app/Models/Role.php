@@ -65,8 +65,8 @@ class Role extends Model
                 ]
             ],
             [
-                'name'        => 'Tenant',
-                'description' => 'Supplier Tenant',
+                'name'        => 'Worker',
+                'description' => 'Supplier Worker',
                 'type'        => Supplier::class,
                 'permissions' => [
                     'read_joborder', 'delete_joborder',

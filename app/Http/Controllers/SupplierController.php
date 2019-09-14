@@ -5,6 +5,7 @@ use App\Models\Property;
 use App\Models\Supplier;
 use App\Models\Tag;
 use App\Models\Photo;
+use App\Models\User;
 use App\Models\JobRequestItem;
 use App\Services\AuthDriverService;
 use Auth;
@@ -166,5 +167,23 @@ class SupplierController extends Controller
     {
         $supplier->update(['primary' => $photo->id]);
         return Supplier::find($supplier->id);
+    }
+
+    /**
+     * user invitations
+     *
+     * @param  \App\Models\Supplier  $supplier
+     * @return \Illuminate\Http\Response
+     */
+    public function invite(Supplier $supplier, Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if($user) {
+            $supplier->logActivity(['description' => ' has been invited ', 'activity' => 'invite'], $user);
+            $supplier->users()->attach($user->id, ['role_id' => $request->role, 'status' => 2, 'client_id' => $supplier->id ]);
+            return $supplier->supplierUsers;
+        } else {
+            return response()->json('user not found', 400);
+        }
     }
 }

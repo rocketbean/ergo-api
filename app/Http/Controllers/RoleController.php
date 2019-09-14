@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\Property;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Http\Resources\RoleResource;
 class RoleController extends Controller
@@ -12,9 +14,15 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return RoleResource::collection(Role::get());
+        if($request->type === 'Property') {
+            return RoleResource::collection(Role::where('type', Property::class)->get());
+        } elseif ($request->type === 'Supplier') {
+            return RoleResource::collection(Role::where('type', Supplier::class)->get());
+        } else {
+            return response()->json('requesting role for unknown type', 404);
+        }
     }
 
     /**

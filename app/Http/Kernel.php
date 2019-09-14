@@ -81,6 +81,7 @@ class Kernel extends HttpKernel
         'PropertyJobRequest.delete' => \App\Http\Middleware\Property\JobRequest\Delete::class,
         'PropertyUser.view' => \App\Http\Middleware\Property\User\View::class,
         'PropertyUser.invite' => \App\Http\Middleware\Property\User\Invite::class,
+        'SupplierUser.invite' => \App\Http\Middleware\Supplier\User\Invite::class,
     ];
 
     /**

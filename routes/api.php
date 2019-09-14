@@ -37,7 +37,6 @@ Route::post('alerts/create', function () {
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::post('alerts', 'AlertController@index');
   Route::post('roles', 'RoleController@index');
-  
   Route::group(['prefix' => 'ergo'], function () {
     Route::get('countries', 'CoreController@countries');
     Route::get('permissions', 'PermissionController@index');
@@ -163,6 +162,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'SupplierController@index');
     Route::post('store', 'SupplierController@store');
     Route::group(['prefix' => '{supplier}'], function () {
+      Route::post('users/invite', 'SupplierController@invite')->middleware('SupplierUser.invite');
       Route::post('update/primary/{photo}', 'SupplierController@primary');
       Route::get('photos', 'SupplierController@photos');
       Route::get('users', 'SupplierController@users');
