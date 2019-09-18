@@ -25,7 +25,7 @@ class Role extends Model
                 'permissions' => [
                     'publish_jobrequest', 'update_jobrequest', 'delete_jobrequest',
                     'approve_joborder', 'read_joborder', 'delete_joborder',
-                    'approve_user', 'create_user', 'read_user', 'update_user', 'delete_user',
+                    'approve_user', 'invite_user', 'read_user', 'update_user', 'delete_user',
                     'show_jobrequests', 'update_jobrequests', 'receive_notifications'
                 ]
             ],
@@ -58,10 +58,8 @@ class Role extends Model
                 'description' => 'Supplier Administrator',
                 'type'        => '*',
                 'permissions' => [
-                    'publish_jobrequest', 'update_jobrequest', 'delete_jobrequest',
-                    'approve_joborder', 'read_joborder', 'delete_joborder',
-                    'approve_user', 'create_user', 'read_user', 'update_user', 'delete_user',
-                    'show_jobrequests', 'update_jobrequests', 'receive_notifications'
+                    'approve_user', 'invite_user', 'read_user', 'update_user', 'delete_user',
+                    'show_joborders', 'update_jobrequests', 'receive_notifications'
                 ]
             ],
             [

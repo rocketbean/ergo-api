@@ -19,20 +19,19 @@ use Illuminate\Http\Request;
 Route::post('testClass', 'CoreController@testClass');
 Route::post('attempt','AuthController@login');
 Route::post('register','RegistrationController@register');
-Route::post('firstUser', 'CoreController@createFirstUser')->middleware('core.configure');
-Route::post('photological', 'CoreController@assignPhotos')->middleware('core.configure');
-Route::post('assigntags', 'CoreController@assignTags')->middleware('core.configure');
-Route::post('assignRoles', 'CoreController@assignRoles')->middleware('core.configure');
-Route::post('assignPermissions', 'CoreController@assignPermissions')->middleware('core.configure');
-Route::post('initial', 'CoreController@configure')->middleware('core.configure');
 
-Route::post('alerts/create', function () {
-  $user = Auth::user();
-  $jr = \App\Models\JobRequest::find(1)->load(['property']);
-  $jo = \App\Models\JobOrder::find(1)->load(['property']);
-  $property = Supplier::findorfail(1);
-  return $user->notify(new newQuote($jr, $jo, $property));
+Route::group(['middleware' => 'core.configure'], function () {
+  Route::post('firstUser', 'CoreController@createFirstUser');
+  Route::post('photological', 'CoreController@assignPhotos');
+  Route::post('assigntags', 'CoreController@assignTags');
+  Route::post('assignRoles', 'CoreController@assignRoles');
+  Route::post('assignPermissions', 'CoreController@assignPermissions');
+  Route::post('initial', 'CoreController@configure');
+  Route::group(['prefix' => 'test'], function () {
+    Route::post('roles', 'TestController@roles');
+  });
 });
+
 
 Route::group(['middleware' => 'jwt.auth'], function () {
   Route::post('alerts', 'AlertController@index');

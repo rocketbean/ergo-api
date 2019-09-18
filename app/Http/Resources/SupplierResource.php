@@ -6,17 +6,27 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
 use App\Models\Supplier;
 use App\Models\JobRequestItem;
+use App\Models\SupplierUser;
 
 class SupplierResource extends JsonResource
 {
 
     private $type;
-
+    private $build = [];
     public function __construct($resource, $type ='')
     {
         parent::__construct($resource);
         $this->type = $type;
     }
+
+    private function build () {
+        $permits = $this->permits();
+        foreach ($permits as $permit) {
+            array_push($this->build, base64_encode($permit->slug));
+        }
+        return $this->build;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -45,12 +55,12 @@ class SupplierResource extends JsonResource
             'files' => $this->files,
             'role' => $this->role(),//(new PropertyUser)->userBridge(Property::find($this->id)),
             'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
-            'updated_at' => Carbon::parse($this->updated_at)->diffForHumans()
+            'updated_at' => Carbon::parse($this->updated_at)->diffForHumans(),
+            'build' => $this->build()
         ];
         if($this->type === 'reviews') {
             $arr['reviews'] = $this->reviews->load(['respondent']);
         }
-
         return $arr;
     }
 }

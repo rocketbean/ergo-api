@@ -60,6 +60,14 @@ class Supplier extends Model
         }
          return false;
     }
+    /**
+     * check if the bridge is authorized
+     */
+    public function permits()
+    {
+        $bridge = (new SupplierUser)->userBridge($this);
+        return $bridge->role->permissions;
+    }
 
     /**
      * check if the bridge is authorized
