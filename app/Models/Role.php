@@ -7,8 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     protected $with = ['permissions'];
-
     protected $guarded = [];
+
+    public function permissions () {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function properties () {
+      return $this->morphedByMany(Property::class, 'roleable');
+    }
+
+    public function suppliers () {
+      return $this->morphedByMany(Supplier::class, 'roleable');
+    }
 
     public function open_roles () {
     	return [
@@ -82,7 +93,4 @@ class Role extends Model
     	];
     }
 
-    public function permissions () {
-        return $this->belongsToMany(Permission::class);
-    }
 }

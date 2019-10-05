@@ -77,6 +77,14 @@ class Supplier extends Model
         return (new SupplierUser)->userBridge($this);
     }
 
+    /**
+     * Get all of the [roles] for the [supplier].
+     */
+    public function roles()
+    {
+        return $this->morphToMany(Role::class, 'roleable')->withTimestamps();
+    }
+
     public function user () {
       return $this->belongsTo(User::class);
     }
@@ -103,7 +111,10 @@ class Supplier extends Model
         foreach ($this->getReviews() as $review) {
             $total += $review->score;
         }
-        $sum = $total / $respondents;
+        if($respondents > 0)
+            $sum = $total / $respondents;
+        else
+            $sum = 0;
         $this->update([
             'ratings' => $sum
         ]);

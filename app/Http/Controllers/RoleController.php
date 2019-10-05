@@ -26,6 +26,26 @@ class RoleController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function SupplierRoles(Supplier $supplier, Request $request)
+    {
+        return RoleResource::collection($supplier->roles);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function PropertyRoles(Property $property, Request $request)
+    {
+        return RoleResource::collection($property->roles);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

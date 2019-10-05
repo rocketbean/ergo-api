@@ -21,7 +21,6 @@ use App\Models\Country;
 use App\Http\Resources\Country as CountryResource;
 use Illuminate\Http\Request;
 
-
 class CoreController extends Controller
 {
     /**
@@ -36,7 +35,38 @@ class CoreController extends Controller
         $this->assignTags();
         $this->assignPermissions();
         $this->assignRoles();
+        $this->setPropertyRoles();
+        $this->setSupplierRoles();
     }
+
+    public function setPropertyRoles () {
+        $properties = Property::get();
+        $roles = Role::where('type', Property::class)->get();
+        foreach ($properties as $property) {
+            $this->processPropertyRoles($property, $roles);
+        }
+    }
+
+    public function processPropertyRoles($property, $roles) {
+        foreach ($roles as $role) {
+            $property->roles()->attach($role->id);
+        }
+    }
+
+    public function setSupplierRoles () {
+        $suppliers = Supplier::get();
+        $roles = Role::where('type', Supplier::class)->get();
+        foreach ($suppliers as $supplier) {
+            $this->processSupplierRoles($supplier, $roles);
+        }
+    }
+
+    public function processSupplierRoles($supplier, $roles) {
+        foreach ($roles as $role) {
+            $supplier->roles()->attach($role->id);
+        }
+    }
+
 
     /**
      * Creates The first admin [user]
@@ -125,7 +155,7 @@ class CoreController extends Controller
      */
     public function attachPermissions($permissions, Role $role) {
         if($permissions === '*') {
-            $permissions = Permission::get();
+            $permissions = Permission::where('group', $role->type)->get();
             foreach ($permissions as $p) {
                 if(!$role->permissions->contains($p->id))
                     $role->permissions()->attach($p->id);
