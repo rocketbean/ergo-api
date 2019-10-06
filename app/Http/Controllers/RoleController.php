@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\Property;
 use App\Models\Supplier;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Resources\RoleResource;
 class RoleController extends Controller
@@ -109,5 +110,27 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         //
+    }
+
+    /**
+     * return [suppliers] permission    
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function SupplierPermissions(Supplier $supplier)
+    {
+        return Permission::where('group', Supplier::class)->get();
+    }
+
+        /**
+     * return [suppliers] permission    
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function PropertyPermissions(Property $property)
+    {
+        return Permission::where('group', Property::class)->get();
     }
 }

@@ -19,4 +19,8 @@ class ErgoService {
   public static function GetUsers () {
       return config('ergo.firstusers');
   }
+
+  public static function GetObjectAttachments () {
+      return config('ergo.objects');
+  }
 }

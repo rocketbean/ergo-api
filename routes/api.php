@@ -28,6 +28,7 @@ Route::group(['middleware' => 'core.configure'], function () {
   Route::post('setPropertyRoles', 'CoreController@setPropertyRoles');
   Route::post('setSupplierRoles', 'CoreController@setSupplierRoles');
   Route::post('assignPermissions', 'CoreController@assignPermissions');
+  Route::post('setObjectAutomation', 'CoreController@setObjectAttachment');
   Route::post('initial', 'CoreController@configure');
   Route::group(['prefix' => 'test'], function () {
     Route::post('roles', 'TestController@roles');
@@ -164,6 +165,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'SupplierController@index');
     Route::post('store', 'SupplierController@store');
     Route::group(['prefix' => '{supplier}'], function () {
+      Route::get('permissions', 'RoleController@SupplierPermissions');
       Route::post('roles', 'RoleController@SupplierRoles');
       Route::post('users/invite', 'SupplierController@invite')->middleware('SupplierUser.invite');
       Route::post('update/primary/{photo}', 'SupplierController@primary');
