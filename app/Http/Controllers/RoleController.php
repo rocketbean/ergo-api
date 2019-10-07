@@ -123,6 +123,27 @@ class RoleController extends Controller
         return Permission::where('group', Supplier::class)->get();
     }
 
+    /**
+     * store new [Supplier]
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function NewSupplierRole(Supplier $supplier, Request $request)
+    {
+        $role = Role::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'type' => Supplier::class,
+        ]);
+        foreach ($request->permits as $permit) {
+            $role->permissions()->attach($permit['id']);
+        }
+        $supplier->roles()->attach($role->id);
+    }
+
+    
+
         /**
      * return [suppliers] permission    
      *

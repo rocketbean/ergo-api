@@ -11,7 +11,7 @@ class Permission extends Model
           [
               'name'            => 'Publish',
               'slug'            => 'publish_jobrequest',
-              'description'     => 'Permission to publish own jobrequest',
+              'description'     => 'Permission to publish own jobrequest only',
               'type'            => JobRequest::class,
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
@@ -19,7 +19,7 @@ class Permission extends Model
           [
               'name'            => 'Update',
               'slug'            => 'update_jobrequest',
-              'description'     => 'Permission to Update own jobrequest',
+              'description'     => 'Permission to Update own jobrequest only',
               'type'            => JobRequest::class,
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
@@ -27,7 +27,7 @@ class Permission extends Model
           [
               'name'            => 'Delete',
               'slug'            => 'delete_jobrequest',
-              'description'     => 'Permission to Delete',
+              'description'     => 'Permission to Delete own jobrequest only',
               'type'            => JobRequest::class,
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
@@ -138,7 +138,7 @@ class Permission extends Model
           [
               'name'            => 'Publish',
               'slug'            => 'publish_jobrequest',
-              'description'     => 'Permission to publish own jobrequest',
+              'description'     => 'Permission to publish own jobrequest only',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
               'group'           => Supplier::class
@@ -146,7 +146,7 @@ class Permission extends Model
           [
               'name'            => 'Update',
               'slug'            => 'update_joborder',
-              'description'     => 'Permission to Update own JobOrder',
+              'description'     => 'Permission to Update own JobOrder only',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
               'group'           => Supplier::class
@@ -154,7 +154,7 @@ class Permission extends Model
           [
               'name'            => 'Delete',
               'slug'            => 'delete_joborder',
-              'description'     => 'Permission to Delete',
+              'description'     => 'Permission to Delete own JobOrder only',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
               'group'           => Supplier::class
@@ -202,25 +202,25 @@ class Permission extends Model
           ],
           // joborders
           [
-              'name'            => 'Approve',
+              'name'            => 'Approve All',
               'slug'            => 'approve_joborder',
-              'description'     => 'Permission to approve',
+              'description'     => 'Permission to approve on all of Joborders',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
               'group'           => Supplier::class
           ],
           [
-              'name'            => 'Read Only',
+              'name'            => 'Read Only All',
               'slug'            => 'read_joborder',
-              'description'     => 'Permission to view',
+              'description'     => 'Permission to view on all of Joborders',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
               'group'           => Supplier::class
           ],
           [
-              'name'            => 'Delete',
+              'name'            => 'Delete All',
               'slug'            => 'delete_joborder',
-              'description'     => 'Permission to Delete',
+              'description'     => 'Permission to Delete on all of Joborders',
               'type'            => JobOrder::class,
               'permission_type' => SupplierUser::class,
               'group'           => Supplier::class
@@ -236,7 +236,7 @@ class Permission extends Model
           ],
 
           [
-              'name'            => 'Update',
+              'name'            => 'Update All',
               'slug'            => 'update_joborders',
               'description'     => 'permission to update all jobrequests',
               'type'            => Supplier::class,
@@ -254,7 +254,7 @@ class Permission extends Model
           ],
 
           [
-              'name'            => 'Notify',
+              'name'            => 'Notify  All',
               'slug'            => 'receive_notifications',
               'description'     => 'receive notifications from all jobrequests',
               'type'            => Supplier::class,
@@ -264,7 +264,12 @@ class Permission extends Model
     ];
   }
 
-  public static function slug ($slug) {
-    return Permission::where('slug', $slug)->first();
+  public static function slug ($slug, $property = true) {
+    if($property)
+      return Permission::where('slug', $slug)->first();
+    else
+      return Permission::where('slug', $slug)
+          ->where('group', Supplier::class)
+          ->first();
   }
 }

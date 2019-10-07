@@ -166,7 +166,14 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('store', 'SupplierController@store');
     Route::group(['prefix' => '{supplier}'], function () {
       Route::get('permissions', 'RoleController@SupplierPermissions');
-      Route::post('roles', 'RoleController@SupplierRoles');
+      /*
+      ********** roles
+      */
+      Route::group(['prefix' => 'roles'], function () {
+        Route::post('/', 'RoleController@SupplierRoles');
+        Route::post('store', 'RoleController@NewSupplierRole');
+      });
+
       Route::post('users/invite', 'SupplierController@invite')->middleware('SupplierUser.invite');
       Route::post('update/primary/{photo}', 'SupplierController@primary');
       Route::get('photos', 'SupplierController@photos');

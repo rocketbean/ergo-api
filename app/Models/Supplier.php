@@ -48,7 +48,7 @@ class Supplier extends Model
     /**
      * check if the bridge is authorized
      */
-    public function authorized($rule, $user = false)
+    public function authorized ($rule, $user = false)
     {
         if(!$user) {
             $bridge = (new SupplierUser)->userBridge($this);
@@ -56,7 +56,7 @@ class Supplier extends Model
             $bridge = (new SupplierUser)->bridge($user, $this);
         }
         if(isset($bridge->role)) {
-            return $bridge->role->permissions->contains(Permission::slug($rule));
+            return $bridge->role->permissions->contains(Permission::slug($rule, false));
         }
          return false;
     }
