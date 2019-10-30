@@ -42,7 +42,7 @@ class ReviewController extends Controller
        $review = $supplier->reviews->where('reviewer_id', Auth::user()->id)
                     ->where('status_id', 2)
                     ->first();
-        if(!Review::enableRespondent(Auth::user(), $supplier)) {
+        if($review) {
             $supplier->computescore();
             $review->update([
                 'content' => $request->remarks,
@@ -50,7 +50,6 @@ class ReviewController extends Controller
                 'status_id' => 1,
             ]);
             return new SupplierResource($supplier->load(['photos', 'location', 'videos','users', 'joborders.jobrequest']));
-
         }
         return response()->json("you've already submitted a review for " . $supplier->name, 403);
 

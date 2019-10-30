@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Carbon\Carbon;
+use Auth;
 use App\Models\Supplier;
 use App\Models\JobRequestItem;
 use App\Models\SupplierUser;
@@ -53,13 +54,18 @@ class SupplierResource extends JsonResource
             'photos' => $this->photos,
             'videos' => $this->videos,
             'files' => $this->files,
-            'role' => $this->role(),//(new PropertyUser)->userBridge(Property::find($this->id)),
+            'role' => $this->role(), //(new PropertyUser)->userBridge(Property::find($this->id)),
             'created_at' => Carbon::parse($this->created_at)->diffForHumans(),
             'updated_at' => Carbon::parse($this->updated_at)->diffForHumans(),
             'build' => $this->build()
         ];
         if($this->type === 'reviews') {
+            $r = $this->reviews->where('reviewer_id', Auth::user()->id)
+                    ->where('status_id', 2)
+                    ->first();
+
             $arr['reviews'] = $this->reviews->load(['respondent']);
+            $arr['enable_review'] = $r ? true : false;
         }
         return $arr;
     }
