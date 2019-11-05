@@ -9,7 +9,7 @@ class JobRequest extends Model
 {
     protected $guarded = [];
         //
-    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'property'];
+    protected $with = ['items', 'photos', 'files', 'videos', 'tags', 'property', 'quotes'];
 
     public function property () {
       return $this->belongsTo(Property::class);
