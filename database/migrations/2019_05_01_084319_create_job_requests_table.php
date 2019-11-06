@@ -23,6 +23,7 @@ class CreateJobRequestsTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->text('uploaderData')->nullable();
+            $table->text('raw')->nullable();
             $table->timestamps();
         });
 
