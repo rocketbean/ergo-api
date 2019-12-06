@@ -132,7 +132,16 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'PropertyController@index');
     Route::post('store', 'PropertyController@store');
     Route::group(['prefix' => '{property}'], function () {
-      Route::post('roles', 'RoleController@PropertyRoles');
+      
+      /*
+      ********** roles
+      */
+      Route::group(['prefix' => 'roles'], function () {
+        Route::post('/', 'RoleController@PropertyRoles');
+        Route::post('store', 'RoleController@NewPropertyRole');
+      });
+
+      // Route::post('roles', 'RoleController@PropertyRoles');
       Route::get('permissions/get', 'PropertyController@permissions');
       Route::post('users/invite', 'PropertyController@invite')->middleware('PropertyUser.invite');
       Route::get('photos', 'PropertyController@photos');

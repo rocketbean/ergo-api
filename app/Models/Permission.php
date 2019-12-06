@@ -134,6 +134,24 @@ class Permission extends Model
               'permission_type' => PropertyUser::class,
               'group'           => Property::class
           ],
+
+          [
+              'name'            => 'Gallery',
+              'slug'            => 'gallery',
+              'description'     => 'view gallery of files',
+              'type'            => Property::class,
+              'permission_type' => PropertyUser::class,
+              'group'           => Property::class
+          ],
+
+          [
+              'name'            => 'Location',
+              'slug'            => 'location',
+              'description'     => 'locate or view your property location',
+              'type'            => Property::class,
+              'permission_type' => PropertyUser::class,
+              'group'           => Property::class
+          ],
           // supplier's permissions
           [
               'name'            => 'Publish',

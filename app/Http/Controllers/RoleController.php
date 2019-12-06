@@ -27,7 +27,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display role listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
@@ -142,10 +142,29 @@ class RoleController extends Controller
         $supplier->roles()->attach($role->id);
     }
 
+    /**
+     * store new [Supplier]
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function NewPropertyRole(Property $property, Request $request)
+    {
+        $role = Role::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'type' => Property::class,
+        ]);
+        foreach ($request->permits as $permit) {
+            $role->permissions()->attach($permit['id']);
+        }
+        $property->roles()->attach($role->id);
+    }
+
     
 
         /**
-     * return [suppliers] permission    
+     * return [property] permission    
      *
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
