@@ -111,7 +111,6 @@ class AuthController extends Controller
         if( $gate['guard'] ) {
           return (new AuthDriverService)->token($supplier, $gate['client'], $request);
         }
-
         return;
       }
 

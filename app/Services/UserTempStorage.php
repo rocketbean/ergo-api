@@ -1,7 +1,6 @@
 <?php 
 namespace App\Services;
 
-use YourApp\User;
 use Tymon\JWTAuth\JWTAuth;
 // use JWTAuth;
 use Auth;

@@ -24,8 +24,9 @@ class AuthDriverService {
     ]);
     $this->userTempStorage = app(UserTempStorage::class);
   }
+
   /**
-   * grants a passport token to the user.
+   * [@request] guzzles token request on auth server.
    * User $user, Request $request
    * @return \Illuminate\Contracts\Auth\Guard
    */ 
