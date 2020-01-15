@@ -246,9 +246,8 @@ class JobOrderController extends Controller
         $jr->property->push_notification(new confirmJobOrder($jo, $jr, $jo->supplier));
         $jr->property->logActivity(['description' => ' confirmed ', 'activity' => 'update'], $item->jobrequestitem);
         $jo->supplier->logActivity(['description' => ' confirmed ', 'activity' => 'update'], $item->jobrequestitem);
-
         return [
-            'joborder' => $njo,
+            'joborder' => $njo->load(['items.jobrequestitem']),
             'jobrequest' => $njr
         ];
 
@@ -270,7 +269,7 @@ class JobOrderController extends Controller
         $jr->property->logActivity(['description' => ' completed ', 'activity' => 'update'], $item->jobrequestitem);
         $jo->supplier->logActivity(['description' => ' completed ', 'activity' => 'update'], $item->jobrequestitem);
         return [
-            'joborder' => $njo,
+            'joborder' => $njo->load(['items.jobrequestitem']),
             'jobrequest' => $njr
         ];
 
@@ -293,7 +292,7 @@ class JobOrderController extends Controller
         $jo->supplier->logActivity(['description' => ' marked as done ', 'activity' => 'update'], $item->jobrequestitem);
         Review::addRespondent(Auth::user(),$jo->supplier);
         return [
-            'joborder' => $njo,
+            'joborder' => $njo->load(['items.jobrequestitem']),
             'jobrequest' => $njr,
             'item' => $item
         ];

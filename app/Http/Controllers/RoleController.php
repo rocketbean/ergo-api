@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\Property;
 use App\Models\Supplier;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Resources\RoleResource;
 class RoleController extends Controller
@@ -23,6 +24,26 @@ class RoleController extends Controller
         } else {
             return response()->json('requesting role for unknown type', 404);
         }
+    }
+
+    /**
+     * Display role listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function SupplierRoles(Supplier $supplier, Request $request)
+    {
+        return RoleResource::collection($supplier->roles);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function PropertyRoles(Property $property, Request $request)
+    {
+        return RoleResource::collection($property->roles);
     }
 
     /**
@@ -89,5 +110,67 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         //
+    }
+
+    /**
+     * return [suppliers] permission    
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function SupplierPermissions(Supplier $supplier)
+    {
+        return Permission::where('group', Supplier::class)->get();
+    }
+
+    /**
+     * store new [Supplier]
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function NewSupplierRole(Supplier $supplier, Request $request)
+    {
+        $role = Role::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'type' => Supplier::class,
+        ]);
+        foreach ($request->permits as $permit) {
+            $role->permissions()->attach($permit['id']);
+        }
+        $supplier->roles()->attach($role->id);
+    }
+
+    /**
+     * store new [Supplier]
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function NewPropertyRole(Property $property, Request $request)
+    {
+        $role = Role::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'type' => Property::class,
+        ]);
+        foreach ($request->permits as $permit) {
+            $role->permissions()->attach($permit['id']);
+        }
+        $property->roles()->attach($role->id);
+    }
+
+    
+
+        /**
+     * return [property] permission    
+     *
+     * @param  \App\Models\Role  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function PropertyPermissions(Property $property)
+    {
+        return Permission::where('group', Property::class)->get();
     }
 }

@@ -25,7 +25,10 @@ Route::group(['middleware' => 'core.configure'], function () {
   Route::post('photological', 'CoreController@assignPhotos');
   Route::post('assigntags', 'CoreController@assignTags');
   Route::post('assignRoles', 'CoreController@assignRoles');
+  Route::post('setPropertyRoles', 'CoreController@setPropertyRoles');
+  Route::post('setSupplierRoles', 'CoreController@setSupplierRoles');
   Route::post('assignPermissions', 'CoreController@assignPermissions');
+  Route::post('setObjectAutomation', 'CoreController@setObjectAttachment');
   Route::post('initial', 'CoreController@configure');
   Route::group(['prefix' => 'test'], function () {
     Route::post('roles', 'TestController@roles');
@@ -129,6 +132,16 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'PropertyController@index');
     Route::post('store', 'PropertyController@store');
     Route::group(['prefix' => '{property}'], function () {
+      
+      /*
+      ********** roles
+      */
+      Route::group(['prefix' => 'roles'], function () {
+        Route::post('/', 'RoleController@PropertyRoles');
+        Route::post('store', 'RoleController@NewPropertyRole');
+      });
+
+      // Route::post('roles', 'RoleController@PropertyRoles');
       Route::get('permissions/get', 'PropertyController@permissions');
       Route::post('users/invite', 'PropertyController@invite')->middleware('PropertyUser.invite');
       Route::get('photos', 'PropertyController@photos');
@@ -161,6 +174,15 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('', 'SupplierController@index');
     Route::post('store', 'SupplierController@store');
     Route::group(['prefix' => '{supplier}'], function () {
+      Route::get('permissions', 'RoleController@SupplierPermissions');
+      /*
+      ********** roles
+      */
+      Route::group(['prefix' => 'roles'], function () {
+        Route::post('/', 'RoleController@SupplierRoles');
+        Route::post('store', 'RoleController@NewSupplierRole');
+      });
+
       Route::post('users/invite', 'SupplierController@invite')->middleware('SupplierUser.invite');
       Route::post('update/primary/{photo}', 'SupplierController@primary');
       Route::get('photos', 'SupplierController@photos');

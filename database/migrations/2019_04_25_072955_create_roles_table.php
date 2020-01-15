@@ -21,6 +21,14 @@ class CreateRolesTable extends Migration
             $table->text('data')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('roleables', function (Blueprint $table) {
+            $table->bigInteger('role_id')->index();
+            $table->bigInteger('roleable_id')->index();
+            $table->string('roleable_type');
+            $table->timestamps();
+            $table->unique(['role_id', 'roleable_id', 'roleable_type']);
+        });
     }
 
     /**
@@ -31,5 +39,6 @@ class CreateRolesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('roles');
+        Schema::dropIfExists('roleables');
     }
 }

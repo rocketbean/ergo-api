@@ -48,7 +48,7 @@ class Supplier extends Model
     /**
      * check if the bridge is authorized
      */
-    public function authorized($rule, $user = false)
+    public function authorized ($rule, $user = false)
     {
         if(!$user) {
             $bridge = (new SupplierUser)->userBridge($this);
@@ -56,7 +56,7 @@ class Supplier extends Model
             $bridge = (new SupplierUser)->bridge($user, $this);
         }
         if(isset($bridge->role)) {
-            return $bridge->role->permissions->contains(Permission::slug($rule));
+            return $bridge->role->permissions->contains(Permission::slug($rule, false));
         }
          return false;
     }
@@ -75,6 +75,14 @@ class Supplier extends Model
     public function role()
     {
         return (new SupplierUser)->userBridge($this);
+    }
+
+    /**
+     * Get all of the [roles] for the [supplier].
+     */
+    public function roles()
+    {
+        return $this->morphToMany(Role::class, 'roleable')->withTimestamps();
     }
 
     public function user () {
@@ -103,7 +111,10 @@ class Supplier extends Model
         foreach ($this->getReviews() as $review) {
             $total += $review->score;
         }
-        $sum = $total / $respondents;
+        if($respondents > 0)
+            $sum = $total / $respondents;
+        else
+            $sum = 0;
         $this->update([
             'ratings' => $sum
         ]);

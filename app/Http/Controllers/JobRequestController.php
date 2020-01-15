@@ -51,7 +51,7 @@ class JobRequestController extends Controller
             'status_id'   => $property->authorized('publish_jobrequest') ? 1 : 0
         ]);
         $property->push_notification(new NewJobRequest(Auth::user(), $jr));
-        return $jr;
+        return JobRequest::find($jr->id);
     }
 
     /**

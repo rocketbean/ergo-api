@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+
 use App\Models\User;
 use App\Models\JobRequest;
 use App\Models\Supplier;
@@ -15,12 +17,12 @@ use App\Services\ErgoService;
 use App\Services\SupplierNotification;
 use App\Services\PropertyNotification;
 use App\Services\NotificationService;
+use App\Services\AuthDriverService;
 use App\Services\ActionModal;
 use App\Services\ActionActive;
 use App\Models\Country;
 use App\Http\Resources\Country as CountryResource;
 use Illuminate\Http\Request;
-
 
 class CoreController extends Controller
 {
@@ -36,7 +38,39 @@ class CoreController extends Controller
         $this->assignTags();
         $this->assignPermissions();
         $this->assignRoles();
+        $this->setObjectAttachment();
+        $this->setPropertyRoles();
+        $this->setSupplierRoles();
     }
+
+    public function setPropertyRoles () {
+        $properties = Property::get();
+        $roles = Role::where('type', Property::class)->get();
+        foreach ($properties as $property) {
+            $this->processPropertyRoles($property, $roles);
+        }
+    }
+
+    public function processPropertyRoles($property, $roles) {
+        foreach ($roles as $role) {
+            $property->roles()->attach($role->id);
+        }
+    }
+
+    public function setSupplierRoles () {
+        $suppliers = Supplier::get();
+        $roles = Role::where('type', Supplier::class)->get();
+        foreach ($suppliers as $supplier) {
+            $this->processSupplierRoles($supplier, $roles);
+        }
+    }
+
+    public function processSupplierRoles($supplier, $roles) {
+        foreach ($roles as $role) {
+            $supplier->roles()->attach($role->id);
+        }
+    }
+
 
     /**
      * Creates The first admin [user]
@@ -125,7 +159,7 @@ class CoreController extends Controller
      */
     public function attachPermissions($permissions, Role $role) {
         if($permissions === '*') {
-            $permissions = Permission::get();
+            $permissions = Permission::where('group', $role->type)->get();
             foreach ($permissions as $p) {
                 if(!$role->permissions->contains($p->id))
                     $role->permissions()->attach($p->id);
@@ -162,6 +196,30 @@ class CoreController extends Controller
             ]);
         }
         return Role::all();
+    }
+
+    /**
+     * creates first [property, supplier] and attaches to user
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function setObjectAttachment (Request $request) {
+        $objs = ErgoService::GetObjectAttachments();
+        foreach ($objs['properties'] as $property) {
+            $user       = User::find($property['user_id']); Auth::login($user);
+            $property   = Property::create($property);
+            $property->users()->attach($user->id, ['role_id' => 1, 'status' => 1]);
+            $user->logActivity(['description' => ' created ', 'activity' => 'created'], $property);
+        }
+
+        foreach ($objs['suppliers'] as $supplier) {
+            $user       = User::find($supplier['user_id']);
+            $request->request->add(['token' => Auth::login($user)]);
+            $supplier   = Supplier::create($supplier);
+            $client     = (new AuthDriverService)->grant($request, $supplier);
+            $user->suppliers()->attach($supplier->id, ['client_id' => $client['id']]);
+        }
     }
 
     /**

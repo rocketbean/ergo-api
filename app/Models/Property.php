@@ -59,6 +59,14 @@ class Property extends Model
     }
 
     /**
+     * Get all of the [roles] for the [property].
+     */
+    public function roles()
+    {
+        return $this->morphToMany(Role::class, 'roleable')->withTimestamps();
+    }
+
+    /**
      * Get all of the [photos] for the [property].
      */
     public function primary()

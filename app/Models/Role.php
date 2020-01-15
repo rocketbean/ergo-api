@@ -7,8 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     protected $with = ['permissions'];
-
     protected $guarded = [];
+
+    public function permissions () {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function properties () {
+      return $this->morphedByMany(Property::class, 'roleable');
+    }
+
+    public function suppliers () {
+      return $this->morphedByMany(Supplier::class, 'roleable');
+    }
 
     public function open_roles () {
     	return [
@@ -26,7 +37,8 @@ class Role extends Model
                     'publish_jobrequest', 'update_jobrequest', 'delete_jobrequest',
                     'approve_joborder', 'read_joborder', 'delete_joborder',
                     'approve_user', 'invite_user', 'read_user', 'update_user', 'delete_user',
-                    'show_jobrequests', 'update_jobrequests', 'receive_notifications'
+                    'show_jobrequests', 'update_jobrequests', 'receive_notifications',
+                    'gallery', 'location'
                 ]
             ],
             [
@@ -34,7 +46,7 @@ class Role extends Model
                 'description' => 'Property Tenant',
                 'type'        => Property::class,
                 'permissions' => [
-                    'read_joborder', 'delete_joborder',
+                    'read_joborder', 'delete_joborder', 'gallery', 'location'
                 ]
             ],
             [
@@ -44,6 +56,7 @@ class Role extends Model
                 'permissions' => [
                     'create_jobrequest', 'read_jobrequest',
                     'approve_joborder', 'read_joborder', 'delete_joborder',
+                     'gallery', 'location'
                 ]
             ],
             // suppliers
@@ -82,7 +95,4 @@ class Role extends Model
     	];
     }
 
-    public function permissions () {
-        return $this->belongsToMany(Permission::class);
-    }
 }
